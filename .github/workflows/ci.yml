@@ -1,0 +1,406 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  release:
+    types: [published]
+
+env:
+  SWIFT_VERSION: '5.9'
+  XCODE_VERSION: '15.0'
+  IOS_DEPLOYMENT_TARGET: '16.0'
+
+jobs:
+  # Swift Package Validation
+  swift-package-validation:
+    name: Swift Package Validation
+    runs-on: macos-14
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Select Xcode version
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: ${{ env.XCODE_VERSION }}
+          
+      - name: Cache Swift PM
+        uses: actions/cache@v4
+        with:
+          path: .build
+          key: ${{ runner.os }}-spm-${{ hashFiles('Package.swift') }}
+          restore-keys: |
+            ${{ runner.os }}-spm-
+            
+      - name: Resolve Package Dependencies  
+        run: swift package resolve
+        
+      - name: Build Package
+        run: swift build -c release
+        
+      - name: Validate Package
+        run: swift package dump-package > /dev/null
+
+  # Unit Tests
+  unit-tests:
+    name: Unit Tests
+    runs-on: macos-14
+    needs: swift-package-validation
+    strategy:
+      matrix:
+        destination:
+          - 'platform=iOS Simulator,OS=17.0,name=iPhone 15 Pro'
+          - 'platform=iOS Simulator,OS=16.0,name=iPhone 14'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Select Xcode version
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: ${{ env.XCODE_VERSION }}
+          
+      - name: Cache Swift PM
+        uses: actions/cache@v4
+        with:
+          path: .build
+          key: ${{ runner.os }}-spm-${{ hashFiles('Package.swift') }}
+          restore-keys: |
+            ${{ runner.os }}-spm-
+            
+      - name: Run Unit Tests
+        run: |
+          swift test \
+            --filter UnitTests \
+            --enable-code-coverage \
+            --parallel
+            
+      - name: Generate Code Coverage
+        run: |
+          xcrun llvm-cov export \
+            .build/debug/AppClipsStudioPackageTests.xctest/Contents/MacOS/AppClipsStudioPackageTests \
+            -instr-profile .build/debug/codecov/default.profdata \
+            -format="lcov" > coverage.lcov
+            
+      - name: Upload Coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          file: ./coverage.lcov
+          flags: unittests
+          name: codecov-umbrella
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+  # Integration Tests
+  integration-tests:
+    name: Integration Tests
+    runs-on: macos-14
+    needs: unit-tests
+    services:
+      mock-server:
+        image: mockserver/mockserver:5.15.0
+        ports:
+          - 1080:1080
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Select Xcode version
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: ${{ env.XCODE_VERSION }}
+          
+      - name: Cache Swift PM
+        uses: actions/cache@v4
+        with:
+          path: .build
+          key: ${{ runner.os }}-spm-${{ hashFiles('Package.swift') }}
+          restore-keys: |
+            ${{ runner.os }}-spm-
+            
+      - name: Start Mock Services
+        run: |
+          # Start local mock server for integration tests
+          docker run -d \
+            --name mock-server \
+            -p 8080:1080 \
+            mockserver/mockserver:5.15.0
+          sleep 10
+          
+      - name: Run Integration Tests
+        env:
+          TEST_MOCK_SERVER_URL: http://localhost:8080
+        run: |
+          swift test \
+            --filter IntegrationTests \
+            --parallel
+            
+      - name: Stop Mock Services
+        if: always()
+        run: docker stop mock-server || true
+
+  # Performance Tests
+  performance-tests:
+    name: Performance Tests
+    runs-on: macos-14-xl  # Use high-performance runners
+    needs: unit-tests
+    if: github.event_name == 'push' || contains(github.event.pull_request.labels.*.name, 'performance')
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Select Xcode version
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: ${{ env.XCODE_VERSION }}
+          
+      - name: Cache Swift PM
+        uses: actions/cache@v4
+        with:
+          path: .build
+          key: ${{ runner.os }}-spm-${{ hashFiles('Package.swift') }}
+          restore-keys: |
+            ${{ runner.os }}-spm-
+            
+      - name: Build Release Version
+        run: swift build -c release
+        
+      - name: Run Performance Tests
+        run: |
+          swift test \
+            --filter PerformanceTests \
+            -c release \
+            --parallel
+            
+      - name: Generate Performance Report
+        run: |
+          # Extract performance metrics and save to file
+          swift test \
+            --filter PerformanceTests \
+            -c release \
+            --enable-test-discovery > performance-results.txt
+            
+      - name: Upload Performance Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: performance-results
+          path: performance-results.txt
+          retention-days: 30
+
+  # Example Projects Validation
+  example-projects:
+    name: Example Projects
+    runs-on: macos-14
+    needs: swift-package-validation
+    strategy:
+      matrix:
+        example:
+          - 'Basic/QuickStart'
+          - 'Intermediate/FoodOrderingApp' 
+          - 'Advanced/MultiTenantApp'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Select Xcode version
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: ${{ env.XCODE_VERSION }}
+          
+      - name: Build Example Project
+        working-directory: Examples/${{ matrix.example }}
+        run: |
+          if [ -f "Package.swift" ]; then
+            swift build -c release
+          else
+            xcodebuild \
+              -scheme "${{ matrix.example }}" \
+              -destination 'platform=iOS Simulator,OS=17.0,name=iPhone 15 Pro' \
+              build
+          fi
+
+  # Documentation Generation
+  documentation:
+    name: Generate Documentation
+    runs-on: macos-14
+    needs: swift-package-validation
+    if: github.ref == 'refs/heads/main' || github.event_name == 'release'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Select Xcode version
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: ${{ env.XCODE_VERSION }}
+          
+      - name: Generate Documentation
+        run: |
+          swift package generate-documentation \
+            --target AppClipsStudio \
+            --disable-indexing \
+            --transform-for-static-hosting \
+            --hosting-base-path AppClipsStudio \
+            --output-path docs
+            
+      - name: Deploy Documentation
+        if: github.ref == 'refs/heads/main'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
+          destination_dir: docs
+
+  # Security Audit
+  security-audit:
+    name: Security Audit
+    runs-on: macos-14
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Run Security Audit
+        run: |
+          # Check for known vulnerabilities in dependencies
+          swift package audit
+          
+      - name: SAST Scan with CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: swift
+          
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v3
+        
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+
+  # Quality Gates
+  quality-gates:
+    name: Quality Gates
+    runs-on: macos-14
+    needs: [unit-tests, integration-tests]
+    if: always()
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Check Test Results
+        run: |
+          # Fail if critical tests failed
+          if [ "${{ needs.unit-tests.result }}" != "success" ]; then
+            echo "Unit tests failed - blocking merge"
+            exit 1
+          fi
+          
+          if [ "${{ needs.integration-tests.result }}" != "success" ]; then
+            echo "Integration tests failed - blocking merge"
+            exit 1
+          fi
+          
+      - name: Quality Summary
+        run: |
+          echo "✅ All quality gates passed!"
+          echo "- Unit Tests: ${{ needs.unit-tests.result }}"
+          echo "- Integration Tests: ${{ needs.integration-tests.result }}"
+
+  # Release Automation
+  release:
+    name: Release
+    runs-on: macos-14
+    needs: [unit-tests, integration-tests, performance-tests, example-projects, security-audit]
+    if: github.event_name == 'release' && github.event.action == 'published'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Select Xcode version
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: ${{ env.XCODE_VERSION }}
+          
+      - name: Validate Release
+        run: |
+          # Ensure version tags are consistent
+          git_tag=${GITHUB_REF#refs/tags/}
+          package_version=$(grep -o 'version: "[^"]*"' Package.swift | cut -d'"' -f2)
+          
+          if [ "$git_tag" != "$package_version" ]; then
+            echo "Version mismatch: git tag ($git_tag) != package version ($package_version)"
+            exit 1
+          fi
+          
+      - name: Build Release Artifacts
+        run: |
+          # Build release version
+          swift build -c release
+          
+          # Create XCFramework
+          xcodebuild archive \
+            -scheme AppClipsStudio \
+            -destination "generic/platform=iOS" \
+            -archivePath "archives/AppClipsStudio-iOS" \
+            SKIP_INSTALL=NO \
+            BUILD_LIBRARY_FOR_DISTRIBUTION=YES
+            
+      - name: Create Release Notes
+        run: |
+          # Generate release notes from commits
+          git log --pretty=format:"- %s" $(git describe --tags --abbrev=0 HEAD^)..HEAD > RELEASE_NOTES.md
+          
+      - name: Update Package Registries
+        run: |
+          # Update Swift Package Index
+          curl -X POST https://packages.swift.org/api/packages \
+            -H "Authorization: Bearer ${{ secrets.SWIFT_PACKAGE_INDEX_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{"url": "https://github.com/${{ github.repository }}"}'
+
+  # Post-Release Tasks
+  post-release:
+    name: Post-Release Tasks  
+    runs-on: macos-14
+    needs: release
+    if: github.event_name == 'release' && github.event.action == 'published'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Update Documentation Sites
+        run: |
+          # Trigger documentation site rebuild
+          curl -X POST https://docs.appclipsstudio.com/api/rebuild \
+            -H "Authorization: Bearer ${{ secrets.DOCS_REBUILD_TOKEN }}"
+            
+      - name: Notify Community
+        run: |
+          # Send notifications to Discord, Twitter, etc.
+          echo "New release published: ${GITHUB_REF#refs/tags/}"
+          
+      - name: Update Homebrew Formula
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          # Update Homebrew formula for CLI tools (if applicable)
+          echo "Updating Homebrew formula for ${GITHUB_REF#refs/tags/}"
+
+# Workflow Status Notifications
+jobs_status:
+  name: Workflow Status
+  runs-on: ubuntu-latest
+  needs: [swift-package-validation, unit-tests, integration-tests, performance-tests, example-projects, security-audit, quality-gates]
+  if: always()
+  steps:
+    - name: Workflow Summary
+      run: |
+        echo "## 📊 Workflow Summary" >> $GITHUB_STEP_SUMMARY
+        echo "| Job | Status |" >> $GITHUB_STEP_SUMMARY  
+        echo "|-----|--------|" >> $GITHUB_STEP_SUMMARY
+        echo "| Swift Package | ${{ needs.swift-package-validation.result }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| Unit Tests | ${{ needs.unit-tests.result }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| Integration Tests | ${{ needs.integration-tests.result }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| Performance Tests | ${{ needs.performance-tests.result || 'skipped' }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| Example Projects | ${{ needs.example-projects.result }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| Security Audit | ${{ needs.security-audit.result }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| Quality Gates | ${{ needs.quality-gates.result }} |" >> $GITHUB_STEP_SUMMARY
