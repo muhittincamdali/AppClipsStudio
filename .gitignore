@@ -1,0 +1,55 @@
+# Xcode
+*.xcodeproj/*
+!*.xcodeproj/project.pbxproj
+!*.xcodeproj/xcshareddata/
+!*.xcodeproj/project.xcworkspace/
+
+# User settings
+xcuserdata/
+
+# Build products
+.build/
+build/
+DerivedData/
+
+# Swift Package Manager
+.swiftpm/
+Package.resolved
+
+# CocoaPods
+Pods/
+
+# Carthage
+Carthage/Build/
+
+# fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/**/*.png
+fastlane/test_output
+
+# Code Injection
+iOSInjectionProject/
+
+# macOS
+.DS_Store
+
+# IDEs
+.vscode/
+.idea/
+
+# Temporary files
+*.swp
+*.swo
+*~
+
+# Test outputs
+*.coverage
+*.profraw
+
+# Documentation build
+docs/
+
+# Coverage reports
+coverage.lcov
+*.lcov
