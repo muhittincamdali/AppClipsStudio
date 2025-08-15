@@ -1,0 +1,114 @@
+name: ✨ Feature Request
+description: Suggest a new feature or enhancement for AppClipsStudio
+title: "[FEATURE] "
+labels: ["enhancement", "needs-triage"]
+assignees: 
+  - muhittincamdali
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a new feature for AppClipsStudio! We appreciate your input.
+
+  - type: textarea
+    id: feature-description
+    attributes:
+      label: Feature Description
+      description: A clear and concise description of the feature you'd like to see
+      placeholder: What would you like to see added to AppClipsStudio?
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem-solving
+    attributes:
+      label: Problem it solves
+      description: Is your feature request related to a problem? Please describe
+      placeholder: I'm always frustrated when building App Clips because...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: module
+    attributes:
+      label: Target Module
+      description: Which AppClipsStudio module would this feature belong to?
+      options:
+        - "AppClipCore"
+        - "AppClipRouter"
+        - "AppClipAnalytics"
+        - "AppClipNetworking"
+        - "AppClipUI"
+        - "AppClipStorage"
+        - "AppClipSecurity"
+        - "AppClipTesting"
+        - "New module"
+        - "Cross-module feature"
+    validations:
+      required: true
+
+  - type: textarea
+    id: api-design
+    attributes:
+      label: API Design (if applicable)
+      description: If this feature would introduce new APIs, please provide a proposed design
+      render: swift
+      placeholder: |
+        // Example API design
+        public func newAppClipFeature() async throws -> Result {
+            // Implementation
+        }
+    validations:
+      required: false
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How important is this feature for App Clip development?
+      options:
+        - "Nice to have"
+        - "Would improve developer experience"
+        - "Important for App Clip functionality"
+        - "Critical for production App Clips"
+    validations:
+      required: true
+
+  - type: textarea
+    id: use-cases
+    attributes:
+      label: App Clip Use Cases
+      description: Provide specific App Clip scenarios where this feature would be beneficial
+      placeholder: |
+        1. When building a retail App Clip...
+        2. For food delivery App Clips...
+        3. In parking payment scenarios...
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional context
+      description: Add any other context about the feature request here
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribution
+      description: Would you be interested in contributing to this feature?
+      options:
+        - label: I'd be willing to contribute this feature
+        - label: I'd need guidance on implementation
+        - label: I can provide testing and feedback
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our Code of Conduct
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true

@@ -56,6 +56,12 @@ let package = Package(
             targets: ["AppClipStorage"]
         ),
         
+        // Security and Encryption
+        .library(
+            name: "AppClipSecurity",
+            targets: ["AppClipSecurity"]
+        ),
+        
         // Testing Utilities
         .library(
             name: "AppClipTesting",
@@ -75,7 +81,8 @@ let package = Package(
                 "AppClipAnalytics",
                 "AppClipUI",
                 "AppClipNetworking",
-                "AppClipStorage"
+                "AppClipStorage",
+                "AppClipSecurity"
             ],
             path: "Sources/AppClipsStudio",
             resources: [
@@ -124,6 +131,12 @@ let package = Package(
             name: "AppClipStorage",
             dependencies: ["AppClipCore"],
             path: "Sources/AppClipStorage"
+        ),
+        
+        .target(
+            name: "AppClipSecurity",
+            dependencies: ["AppClipCore"],
+            path: "Sources/AppClipSecurity"
         ),
         
         // MARK: - Testing Support
@@ -201,6 +214,15 @@ let package = Package(
                 "AppClipTesting"
             ],
             path: "Tests/UnitTests/AppClipStorage"
+        ),
+        
+        .testTarget(
+            name: "AppClipSecurityTests",
+            dependencies: [
+                "AppClipSecurity",
+                "AppClipTesting"
+            ],
+            path: "Tests/UnitTests/AppClipSecurity"
         ),
         
         // MARK: - Integration Tests
