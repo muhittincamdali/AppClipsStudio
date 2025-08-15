@@ -1,402 +1,346 @@
-# 📱 App Clips Studio Examples
+# AppClipsStudio Examples
 
-Comprehensive examples demonstrating App Clips Studio capabilities across three progressive learning levels.
+This directory contains comprehensive examples demonstrating how to build powerful App Clips using AppClipsStudio framework.
 
-## 🎯 Learning Path Overview
+## 📱 Examples Overview
 
-Master App Clips development through structured examples that build upon each other:
+### [BasicExample](./BasicExample/)
+**Perfect starting point for App Clip development**
 
-- **🟢 Basic (Level 1)**: Foundation concepts and simple implementations
-- **🟡 Intermediate (Level 2)**: Real-world patterns and advanced features  
-- **🔴 Advanced (Level 3)**: Enterprise-grade solutions and complex architectures
+- ✅ App Clip initialization and configuration
+- ✅ Deep link processing and routing
+- ✅ Analytics tracking and metrics
+- ✅ Secure data storage and retrieval
+- ✅ SwiftUI integration with App Clip constraints
+- ✅ Security monitoring and threat detection
 
-## 📚 Example Categories
+**Key App Clip Features Demonstrated:**
+- Modern async/await patterns optimized for App Clips
+- Efficient resource usage within 10MB constraints
+- Fast launch times and instant user engagement
+- Privacy-preserving analytics collection
+- Secure session management
+- App Store optimization techniques
 
-### Progressive Learning Structure
-
-```
-Examples/
-├── Basic/                    # 🟢 Foundation Level
-│   ├── QuickStart/          # Hello World App Clip
-│   ├── SimpleMenu/          # Basic menu display
-│   ├── URLRouting/          # URL parameter handling
-│   └── BasicAnalytics/      # Simple event tracking
-├── Intermediate/            # 🟡 Real-World Level
-│   ├── FoodOrderingApp/     # Complete ordering system
-│   ├── EventTicketing/      # Ticket booking flow
-│   ├── RetailShowroom/      # Product catalog & cart
-│   └── ParkingPayment/      # Payment processing
-└── Advanced/                # 🔴 Enterprise Level
-    ├── MultiTenantApp/      # Enterprise multi-tenant
-    ├── FinancialServices/   # Banking & payments
-    ├── HealthcarePortal/    # HIPAA-compliant system
-    └── ARShoppingDemo/      # Augmented reality
-```
-
-## 🚀 Quick Start Guide
+## 🚀 Quick Start for App Clips
 
 ### Prerequisites
 
-- Xcode 15.0+
-- iOS 16.0+ deployment target
-- Swift 5.9+
-- App Clips Studio framework
+- **Xcode 15.0+** with Swift 5.9+
+- **iOS 16.0+** / macOS 13.0+ / watchOS 9.0+ / tvOS 16.0+ / visionOS 1.0+
+- **AppClipsStudio 1.0+**
+- **App Clip Target** configured in your Xcode project
 
-### Running Examples
+### Installation
 
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/muhittincamdali/AppClipsStudio.git
-   cd AppClipsStudio/Examples
+1. **Add AppClipsStudio to your App Clip target**:
+   ```swift
+   dependencies: [
+       .package(url: "https://github.com/muhittincamdali/AppClipsStudio", from: "1.0.0")
+   ]
    ```
 
-2. **Choose your level**:
-   ```bash
-   # Basic examples
-   cd Basic/QuickStart
-   open QuickStart.xcodeproj
+2. **Import and initialize in your App Clip**:
+   ```swift
+   import AppClipsStudio
    
-   # Intermediate examples  
-   cd Intermediate/FoodOrderingApp
-   open FoodOrderingApp.xcodeproj
-   
-   # Advanced examples
-   cd Advanced/MultiTenantApp
-   open MultiTenantApp.xcodeproj
+   @main
+   struct MyAppClip: App {
+       var body: some Scene {
+           WindowGroup {
+               ContentView()
+                   .task {
+                       await AppClipCore.shared.initialize()
+                   }
+           }
+       }
+   }
    ```
 
-3. **Build and run**:
-   - Select an iOS device or simulator
-   - Press ⌘+R to build and run
-   - Test App Clip URLs using Safari or custom URL schemes
+3. **Start building amazing App Clip experiences**:
+   ```swift
+   // Process deep links
+   await AppClipRouter.shared.processDeepLink(url)
+   
+   // Track user engagement
+   await AppClipAnalytics.shared.trackEvent("app_clip_launched")
+   
+   // Store session data securely
+   await AppClipStorage.shared.store(key: "user_preference", value: data)
+   ```
 
-## 🟢 Basic Examples
+## 📖 App Clip Development Walkthrough
 
-Perfect for beginners learning App Clips fundamentals.
-
-### [QuickStart](Basic/QuickStart/) - Hello World App Clip
-**Complexity**: ⭐☆☆ | **Time**: 15 minutes
+### Basic App Clip Setup
 
 ```swift
-// Simple App Clip entry point
+import SwiftUI
+import AppClipsStudio
+
 @main
-struct QuickStartApp: App {
+struct FoodOrderingAppClip: App {
     var body: some Scene {
         WindowGroup {
-            AppClipsStudio.shared.createAppClipView {
-                WelcomeView()
-            }
+            AppClipContentView()
+                .onContinueUserActivity(NSUserActivityTypeBrowsingWeb) { userActivity in
+                    guard let url = userActivity.webpageURL else { return }
+                    Task {
+                        await AppClipRouter.shared.processDeepLink(url)
+                    }
+                }
+                .task {
+                    // Initialize AppClipsStudio
+                    await AppClipCore.shared.initialize()
+                    
+                    // Configure analytics for App Clips
+                    await AppClipAnalytics.shared.configure(
+                        privacyMode: .strict,
+                        batchSize: 10,
+                        flushInterval: 30
+                    )
+                    
+                    // Enable security monitoring
+                    await AppClipSecurity.shared.enableThreatMonitoring()
+                }
         }
     }
 }
 ```
 
-**What you'll learn**:
-- App Clip project setup
-- Basic App Clips Studio integration
-- URL handling fundamentals
-- Simple SwiftUI layout
-
-### [SimpleMenu](Basic/SimpleMenu/) - Restaurant Menu Display
-**Complexity**: ⭐☆☆ | **Time**: 30 minutes
-
-**What you'll learn**:
-- Loading data from JSON
-- List presentation in SwiftUI
-- Basic navigation patterns
-- Image loading and caching
-
-### [URLRouting](Basic/URLRouting/) - Deep Link Navigation
-**Complexity**: ⭐⭐☆ | **Time**: 45 minutes
-
-**What you'll learn**:
-- URL parameter extraction
-- Route-based navigation
-- State management basics
-- Error handling patterns
-
-### [BasicAnalytics](Basic/BasicAnalytics/) - Event Tracking
-**Complexity**: ⭐⭐☆ | **Time**: 30 minutes
-
-**What you'll learn**:
-- Analytics setup and configuration
-- Custom event tracking
-- User interaction monitoring
-- Privacy-compliant data collection
-
-## 🟡 Intermediate Examples
-
-Real-world applications with complete user flows.
-
-### [FoodOrderingApp](Intermediate/FoodOrderingApp/) - Complete Restaurant Ordering
-**Complexity**: ⭐⭐⭐ | **Time**: 2-3 hours
-
-**Features**:
-- Menu browsing with categories
-- Shopping cart management
-- Checkout and payment simulation
-- Order confirmation and tracking
-
-**What you'll learn**:
-- Complex state management
-- Multi-screen navigation flows
-- Data persistence
-- Payment integration patterns
-- Real-time order tracking
-
-### [EventTicketing](Intermediate/EventTicketing/) - Concert Ticket Booking
-**Complexity**: ⭐⭐⭐ | **Time**: 2-3 hours
-
-**Features**:
-- Event discovery and details
-- Seat selection interface
-- Ticket purchasing flow
-- QR code generation for tickets
-
-**What you'll learn**:
-- Custom UI components
-- Animation and transitions
-- Secure payment handling
-- Digital ticket generation
-
-### [RetailShowroom](Intermediate/RetailShowroom/) - Product Catalog & Shopping
-**Complexity**: ⭐⭐⭐ | **Time**: 3-4 hours
-
-**Features**:
-- Product browsing and search
-- Detailed product views with gallery
-- Wishlist and cart management
-- Store locator integration
-
-**What you'll learn**:
-- Advanced UI patterns
-- Search and filtering
-- Location services integration
-- Inventory management
-
-### [ParkingPayment](Intermediate/ParkingPayment/) - Smart Parking Solution
-**Complexity**: ⭐⭐☆ | **Time**: 1-2 hours
-
-**Features**:
-- QR code parking spot identification
-- Time-based payment calculation
-- Payment processing
-- Timer and notifications
-
-**What you'll learn**:
-- QR code scanning
-- Timer management
-- Background processing
-- Push notifications
-
-## 🔴 Advanced Examples
-
-Enterprise-grade solutions with complex architectures.
-
-### [MultiTenantApp](Advanced/MultiTenantApp/) - Enterprise Multi-Tenant Platform
-**Complexity**: ⭐⭐⭐⭐⭐ | **Time**: 1-2 days
-
-**Features**:
-- Multi-tenant architecture
-- Role-based access control
-- Dynamic branding and theming
-- Advanced analytics and reporting
-- Enterprise SSO integration
-
-**What you'll learn**:
-- Scalable architecture patterns
-- Security best practices
-- Performance optimization
-- Enterprise integration patterns
-- Advanced state management
-
-### [FinancialServices](Advanced/FinancialServices/) - Banking & Investment Portal
-**Complexity**: ⭐⭐⭐⭐⭐ | **Time**: 2-3 days
-
-**Features**:
-- Account balance and transactions
-- Investment portfolio tracking
-- Secure money transfers
-- Biometric authentication
-- Compliance reporting
-
-**What you'll learn**:
-- Financial data security
-- Biometric authentication
-- Real-time data streaming
-- Regulatory compliance
-- Advanced encryption
-
-### [HealthcarePortal](Advanced/HealthcarePortal/) - HIPAA-Compliant Patient Portal
-**Complexity**: ⭐⭐⭐⭐⭐ | **Time**: 2-3 days
-
-**Features**:
-- Patient record access
-- Appointment scheduling
-- Telemedicine integration
-- Secure messaging
-- Prescription management
-
-**What you'll learn**:
-- HIPAA compliance implementation
-- Healthcare data security
-- Integration with health APIs
-- Accessibility for healthcare
-- Patient privacy protection
-
-### [ARShoppingDemo](Advanced/ARShoppingDemo/) - Augmented Reality Shopping
-**Complexity**: ⭐⭐⭐⭐☆ | **Time**: 1-2 days
-
-**Features**:
-- AR product visualization
-- Virtual try-on experiences
-- 3D model interaction
-- Social sharing integration
-- Purchase from AR view
-
-**What you'll learn**:
-- ARKit integration
-- 3D model handling
-- Camera and image processing
-- Spatial computing concepts
-- Performance optimization for AR
-
-## 🛠️ Development Setup
-
-### Environment Requirements
-
-```bash
-# Verify your setup
-xcode-select --version
-swift --version
-```
-
-Required versions:
-- **Xcode**: 15.0+
-- **Swift**: 5.9+
-- **iOS Deployment Target**: 16.0+
-
-### Building Examples
-
-Each example includes:
-- **Xcode project** with complete source code
-- **README.md** with step-by-step guide
-- **Resources** folder with assets and data
-- **Tests** folder with example tests
-- **Documentation** with architecture explanations
-
-### Testing App Clips
-
-1. **Simulator Testing**:
-   ```bash
-   # Test with Safari
-   # Open Safari and navigate to your test URL
-   ```
-
-2. **Device Testing**:
-   ```bash
-   # Register your test URLs in App Store Connect
-   # Use TestFlight for distribution
-   ```
-
-3. **URL Testing**:
-   ```bash
-   # Test various URL patterns
-   https://example.com/restaurant/123
-   https://example.com/events/concert-abc
-   https://example.com/parking/spot-456
-   ```
-
-## 📊 Performance Benchmarks
-
-### Example Performance Metrics
-
-| Example | Launch Time | Memory Usage | App Size | Features |
-|---------|-------------|--------------|----------|----------|
-| **QuickStart** | 65ms | 2.1MB | +1.8MB | Basic setup |
-| **SimpleMenu** | 78ms | 3.4MB | +2.2MB | Data loading |
-| **FoodOrdering** | 95ms | 5.8MB | +4.1MB | Full flow |
-| **EventTicketing** | 89ms | 5.2MB | +3.8MB | Payments |
-| **MultiTenant** | 120ms | 8.9MB | +6.2MB | Enterprise |
-
-### Optimization Tips
+### Advanced App Clip Features
 
 ```swift
-// Lazy loading for better performance
-struct MenuView: View {
-    @StateObject private var viewModel = MenuViewModel()
+// Efficient data fetching for App Clips
+let networking = AppClipNetworking.shared
+let menuData = try await networking.fetchData(from: "/api/restaurant/123/menu")
+
+// Privacy-preserving analytics
+await AppClipAnalytics.shared.trackEvent("menu_viewed", properties: [
+    "restaurant_id": "123",
+    "item_count": menuData.items.count,
+    "load_time": String(loadTime)
+])
+
+// Secure session management
+let storage = AppClipStorage.shared
+await storage.store(key: "session_token", value: sessionToken, encrypted: true)
+
+// Real-time security monitoring
+let securityStatus = await AppClipSecurity.shared.getSecurityMetrics()
+if securityStatus.threatLevel > .moderate {
+    // Handle security concern
+}
+```
+
+## 🎯 App Clip Use Case Examples
+
+### Retail & E-commerce App Clips
+```swift
+// Product discovery and quick purchase
+await AppClipRouter.shared.registerHandler(for: "product") { parameters in
+    await handleProductView(productId: parameters["id"])
+}
+
+// Cart and checkout optimization
+await AppClipAnalytics.shared.startFunnel("quick_purchase")
+await AppClipAnalytics.shared.trackFunnelStep("product_view")
+await AppClipAnalytics.shared.trackFunnelStep("add_to_cart")
+await AppClipAnalytics.shared.completeFunnel("purchase_complete", value: 49.99)
+```
+
+### Food & Delivery App Clips
+```swift
+// Restaurant menu and ordering
+await AppClipCore.shared.configure(
+    maxMemoryUsage: 8 * 1024 * 1024, // 8MB limit for food ordering
+    cachePolicy: .aggressive
+)
+
+// Location-aware ordering
+await AppClipAnalytics.shared.trackEvent("restaurant_located", properties: [
+    "delivery_zone": deliveryZone,
+    "estimated_delivery": estimatedTime
+])
+```
+
+### Parking & Transportation App Clips
+```swift
+// Quick payment and session tracking
+await AppClipStorage.shared.store(key: "parking_session", value: [
+    "location": parkingLocation,
+    "start_time": Date(),
+    "rate": hourlyRate
+])
+
+// Payment processing with security
+await AppClipSecurity.shared.validatePaymentSession()
+await AppClipAnalytics.shared.trackEvent("payment_initiated")
+```
+
+## 🔧 App Clip Configuration Examples
+
+### Development Configuration
+```swift
+let devConfig = AppClipConfiguration(
+    environment: .development,
+    maxBundleSize: 8 * 1024 * 1024, // 8MB for development testing
+    cachePolicy: .reloadIgnoringLocalData,
+    analyticsMode: .verbose,
+    securityLevel: .standard
+)
+
+await AppClipCore.shared.configure(devConfig)
+```
+
+### Production Configuration
+```swift
+let prodConfig = AppClipConfiguration(
+    environment: .production,
+    maxBundleSize: 10 * 1024 * 1024, // 10MB App Store limit
+    cachePolicy: .returnCacheDataElseLoad,
+    analyticsMode: .optimized,
+    securityLevel: .strict
+)
+
+await AppClipCore.shared.configure(prodConfig)
+```
+
+## 📊 App Clip Performance Optimization
+
+### Bundle Size Optimization
+```swift
+// Monitor and optimize bundle size
+let core = AppClipCore.shared
+let bundleSize = await core.getBundleSize()
+
+if bundleSize > 9 * 1024 * 1024 { // Alert at 9MB
+    await core.optimizeResources()
+    await AppClipAnalytics.shared.trackEvent("bundle_optimization_triggered")
+}
+```
+
+### Memory Management
+```swift
+// Efficient memory usage for App Clips
+await AppClipCore.shared.setMemoryManagement(
+    aggressiveCleanup: true,
+    cacheLimit: 2 * 1024 * 1024, // 2MB cache limit
+    imageCompressionLevel: 0.7
+)
+```
+
+### Launch Time Optimization
+```swift
+// Measure and optimize launch performance
+let startTime = Date()
+await AppClipCore.shared.initialize()
+let launchTime = Date().timeIntervalSince(startTime)
+
+await AppClipAnalytics.shared.trackEvent("app_clip_launch_time", properties: [
+    "duration_ms": Int(launchTime * 1000),
+    "cold_start": isColdStart
+])
+```
+
+## 📱 App Store Guidelines Compliance
+
+### Privacy and Data Collection
+```swift
+// Minimal data collection for App Clips
+await AppClipAnalytics.shared.configure(
+    collectDeviceInfo: false,
+    anonymizeUserData: true,
+    retentionPeriod: .days(7) // Short retention for App Clips
+)
+```
+
+### User Experience Best Practices
+```swift
+// Quick value delivery
+struct AppClipContentView: View {
+    @State private var isLoading = true
     
     var body: some View {
-        LazyVStack {
-            ForEach(viewModel.items) { item in
-                MenuItemRow(item: item)
-                    .onAppear {
-                        viewModel.loadMoreIfNeeded(item)
-                    }
-            }
+        if isLoading {
+            // Show immediate value while loading
+            QuickActionView()
+                .task {
+                    // Load essential data only
+                    await loadEssentialData()
+                    isLoading = false
+                }
+        } else {
+            MainAppClipView()
         }
     }
 }
 ```
 
-## 🎯 Learning Recommendations
+## 🧪 Testing App Clips
 
-### Beginner Path (2-4 weeks)
-1. Start with **QuickStart** to understand basics
-2. Build **SimpleMenu** to learn data handling
-3. Explore **URLRouting** for navigation concepts
-4. Complete **BasicAnalytics** for tracking insights
+### Unit Testing
+```swift
+import XCTest
+@testable import AppClipsStudio
 
-### Intermediate Path (4-8 weeks)
-1. Build **FoodOrderingApp** for complete flow understanding
-2. Create **EventTicketing** to learn payment integration
-3. Develop **RetailShowroom** for advanced UI patterns
-4. Implement **ParkingPayment** for real-world scenarios
-
-### Advanced Path (8-12 weeks)
-1. Study **MultiTenantApp** for enterprise patterns
-2. Implement **FinancialServices** for security best practices  
-3. Build **HealthcarePortal** for compliance understanding
-4. Create **ARShoppingDemo** for cutting-edge features
-
-## 🤝 Contributing Examples
-
-We welcome example contributions! Please follow these guidelines:
-
-### Adding New Examples
-
-1. **Choose appropriate level** (Basic/Intermediate/Advanced)
-2. **Follow naming conventions** (PascalCase for projects)
-3. **Include comprehensive README** with learning objectives
-4. **Add performance benchmarks** and optimization notes
-5. **Write unit tests** demonstrating key concepts
-
-### Example Structure
-
-```
-YourExample/
-├── YourExample.xcodeproj
-├── README.md                 # Detailed guide
-├── Sources/
-│   ├── YourExampleApp.swift # Main app file
-│   ├── Views/               # SwiftUI views
-│   ├── Models/              # Data models
-│   └── Services/            # Business logic
-├── Resources/
-│   ├── Assets.xcassets     # Images and icons
-│   └── Data/               # Sample JSON data
-└── Tests/
-    └── YourExampleTests/   # Unit tests
+class AppClipTests: XCTestCase {
+    func testAppClipInitialization() async {
+        let core = AppClipCore.shared
+        await core.initialize()
+        
+        let isInitialized = await core.isInitialized
+        XCTAssertTrue(isInitialized)
+    }
+    
+    func testDeepLinkProcessing() async {
+        let router = AppClipRouter.shared
+        let testURL = URL(string: "https://example.com/appclip?item=123")!
+        
+        await router.processDeepLink(testURL)
+        
+        let lastProcessedURL = await router.lastProcessedURL
+        XCTAssertEqual(lastProcessedURL, testURL)
+    }
+}
 ```
 
-### Quality Standards
+### Integration Testing with AppClipTesting
+```swift
+import AppClipsStudio
 
-- **Code Quality**: Follow Swift style guide
-- **Documentation**: Comprehensive inline comments
-- **Performance**: Optimize for App Clip constraints
-- **Accessibility**: Support VoiceOver and Dynamic Type
-- **Testing**: Unit tests for core functionality
+class AppClipIntegrationTests: XCTestCase {
+    func testCompleteAppClipWorkflow() async throws {
+        let testing = AppClipTesting.shared
+        
+        // Test complete App Clip flow
+        try await testing.runWorkflowTest {
+            await AppClipCore.shared.initialize()
+            await AppClipRouter.shared.processDeepLink(testURL)
+            await AppClipAnalytics.shared.trackEvent("test_event")
+            await AppClipStorage.shared.store(key: "test", value: "data")
+        }
+        
+        let results = await testing.getTestResults()
+        XCTAssertTrue(results.allPassed)
+    }
+}
+```
+
+## 📚 Additional Resources
+
+- [AppClipsStudio Documentation](../README.md)
+- [Contributing to AppClipsStudio](../CONTRIBUTING.md)
+- [App Clip Development Guide](https://developer.apple.com/app-clips/)
+- [App Store Guidelines for App Clips](https://developer.apple.com/app-store/review/guidelines/#app-clips)
+
+## 🎯 Next Steps
+
+1. **Start with BasicExample**: Get familiar with AppClipsStudio fundamentals
+2. **Explore Module Documentation**: Deep dive into each AppClipsStudio module
+3. **Build Your App Clip**: Apply learnings to your specific use case
+4. **Optimize for App Store**: Use built-in tools for size and performance optimization
+5. **Test Thoroughly**: Leverage AppClipTesting for comprehensive validation
 
 ---
 
-**Ready to start building amazing App Clips? Choose your level and dive in! 🚀**
+**Ready to build amazing App Clip experiences? Start with the [BasicExample](./BasicExample/) and create something extraordinary! 📱🚀**

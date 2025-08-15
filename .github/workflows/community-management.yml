@@ -1,0 +1,341 @@
+name: Community Management
+
+on:
+  issues:
+    types: [opened, labeled, assigned]
+  pull_request:
+    types: [opened, review_requested, ready_for_review]
+  schedule:
+    - cron: '0 10 * * MON'  # Every Monday at 10 AM UTC
+
+jobs:
+  welcome-new-contributors:
+    runs-on: ubuntu-latest
+    if: github.event.action == 'opened'
+    steps:
+      - name: Welcome new issues
+        if: github.event_name == 'issues'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issue = context.payload.issue;
+            const isFirstTimeContributor = issue.author_association === 'FIRST_TIME_CONTRIBUTOR';
+            
+            if (isFirstTimeContributor) {
+              github.rest.issues.createComment({
+                issue_number: issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: `=K Welcome to AppClipsStudio! Thank you for opening your first issue.
+                
+                =ñ **Building Amazing App Clips Together!**
+                - Our team will review your issue within 24-48 hours
+                - We'll add appropriate labels and assign it to the right module expert
+                - You'll receive updates as we investigate and work on a solution
+                
+                =€ **Want to contribute to App Clip development?**
+                - Check out our [Contributing Guide](../CONTRIBUTING.md)
+                - Browse [good first issues](../../issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
+                - Explore [App Clip examples](../../tree/main/Examples)
+                - Join our [Discussions](../../discussions) for App Clip development questions
+                
+                Thank you for helping make App Clip development easier! =ñ(`
+              });
+            }
+
+      - name: Welcome new pull requests
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            const isFirstTimeContributor = pr.author_association === 'FIRST_TIME_CONTRIBUTOR';
+            
+            if (isFirstTimeContributor) {
+              github.rest.issues.createComment({
+                issue_number: pr.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: `<‰ Welcome to AppClipsStudio! Thank you for your first App Clip contribution.
+                
+                =ñ **PR Review Process for App Clips:**
+                -  CI/CD checks will run automatically across all modules
+                - =@ Our App Clip experts will review your changes within 24-48 hours
+                - = We may request changes or provide App Clip specific feedback
+                - ( Once approved, we'll merge your contribution!
+                
+                =¡ **Tips for App Clip development:**
+                - Ensure all module tests pass (Core, Router, Analytics, etc.)
+                - Follow App Clip size constraints and best practices
+                - Update documentation for new App Clip features
+                - Test on actual devices when possible
+                - Be responsive to App Clip specific feedback
+                
+                Thank you for contributing to the App Clip ecosystem! =O=ñ`
+              });
+            }
+
+  auto-label-issues:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'issues' && github.event.action == 'opened'
+    steps:
+      - name: Auto-label App Clip issues
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issue = context.payload.issue;
+            const title = issue.title.toLowerCase();
+            const body = issue.body.toLowerCase();
+            const labels = [];
+            
+            // Auto-label based on title/body content
+            if (title.includes('[bug]') || body.includes('bug') || body.includes('error') || body.includes('crash')) {
+              labels.push('bug');
+            }
+            
+            if (title.includes('[feature]') || body.includes('feature request') || body.includes('enhancement')) {
+              labels.push('enhancement');
+            }
+            
+            // App Clip specific modules
+            if (body.includes('appclipcore') || body.includes('core module')) {
+              labels.push('AppClipCore');
+            }
+            
+            if (body.includes('approuter') || body.includes('routing') || body.includes('deep link')) {
+              labels.push('AppClipRouter');
+            }
+            
+            if (body.includes('analytics') || body.includes('tracking') || body.includes('metrics')) {
+              labels.push('AppClipAnalytics');
+            }
+            
+            if (body.includes('networking') || body.includes('http') || body.includes('api')) {
+              labels.push('AppClipNetworking');
+            }
+            
+            if (body.includes('ui') || body.includes('swiftui') || body.includes('interface')) {
+              labels.push('AppClipUI');
+            }
+            
+            if (body.includes('storage') || body.includes('data') || body.includes('persistence')) {
+              labels.push('AppClipStorage');
+            }
+            
+            if (body.includes('security') || body.includes('privacy') || body.includes('encryption')) {
+              labels.push('AppClipSecurity');
+            }
+            
+            if (body.includes('testing') || body.includes('unit test') || body.includes('integration test')) {
+              labels.push('AppClipTesting');
+            }
+            
+            // App Clip specific scenarios
+            if (body.includes('app store') || body.includes('review') || body.includes('submission')) {
+              labels.push('app-store');
+            }
+            
+            if (body.includes('size limit') || body.includes('10mb') || body.includes('bundle size')) {
+              labels.push('size-optimization');
+            }
+            
+            if (body.includes('performance') || body.includes('launch time') || body.includes('memory')) {
+              labels.push('performance');
+            }
+            
+            if (body.includes('documentation') || title.includes('docs') || body.includes('readme')) {
+              labels.push('documentation');
+            }
+            
+            if (body.includes('help') || body.includes('question') || body.includes('how to')) {
+              labels.push('question');
+            }
+            
+            // Difficulty labels for new contributors
+            if (body.includes('typo') || body.includes('documentation fix') || body.includes('example')) {
+              labels.push('good first issue');
+            }
+            
+            if (labels.length > 0) {
+              github.rest.issues.addLabels({
+                issue_number: issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                labels: labels
+              });
+            }
+
+  stale-issues:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule'
+    steps:
+      - name: Mark stale App Clip issues
+        uses: actions/stale@v9
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          stale-issue-message: |
+            =K This App Clip issue has been automatically marked as stale because it has been inactive for 45 days.
+            
+            =ñ **What happens next for App Clips?**
+            - This issue will be closed in 7 days if no activity occurs
+            - Comment to keep this App Clip issue active
+            - The maintainers may still review and address this App Clip concern
+            
+            = **To prevent this in the future:**
+            - Provide additional App Clip context or test results
+            - Engage with maintainer questions about App Clip behavior
+            - Submit a pull request if you're working on this App Clip feature
+            - Share device testing results or size impact analysis
+            
+            Thank you for your contribution to App Clip development! =ñ=O
+          stale-pr-message: |
+            =K This App Clip PR has been automatically marked as stale because it has been inactive for 30 days.
+            
+            =ñ **What happens next for your App Clip contribution?**
+            - This PR will be closed in 7 days if no activity occurs
+            - Push new commits or comment to keep this App Clip PR active
+            - Maintainers may still review and merge if appropriate for App Clips
+            
+            = **To get this App Clip PR merged:**
+            - Rebase on the latest main branch
+            - Address any App Clip specific review feedback
+            - Ensure all module tests pass
+            - Test on actual devices if UI changes are involved
+            - Request re-review from App Clip maintainers
+            
+            Thank you for contributing to App Clip development! =ñ=O
+          days-before-stale: 45
+          days-before-close: 7
+          stale-issue-label: 'stale'
+          stale-pr-label: 'stale'
+          exempt-issue-labels: 'security,critical,pinned,app-store'
+          exempt-pr-labels: 'security,critical,pinned,app-store'
+
+  app-clip-health-check:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule'
+    steps:
+      - name: App Clip community health check
+        uses: actions/github-script@v7
+        with:
+          script: |
+            // Generate monthly App Clip community report
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'all',
+              since: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()
+            });
+            
+            const { data: prs } = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'all',
+              sort: 'updated',
+              direction: 'desc'
+            });
+            
+            // Categorize by App Clip modules
+            const moduleStats = {
+              'AppClipCore': 0,
+              'AppClipRouter': 0,
+              'AppClipAnalytics': 0,
+              'AppClipNetworking': 0,
+              'AppClipUI': 0,
+              'AppClipStorage': 0,
+              'AppClipSecurity': 0,
+              'AppClipTesting': 0
+            };
+            
+            issues.forEach(issue => {
+              issue.labels.forEach(label => {
+                if (moduleStats.hasOwnProperty(label.name)) {
+                  moduleStats[label.name]++;
+                }
+              });
+            });
+            
+            const openIssues = issues.filter(issue => issue.state === 'open' && !issue.pull_request);
+            const closedIssues = issues.filter(issue => issue.state === 'closed' && !issue.pull_request);
+            const openPRs = prs.filter(pr => pr.state === 'open');
+            const mergedPRs = prs.filter(pr => pr.merged_at);
+            
+            console.log(`=ñ Monthly App Clip Community Report:
+            - <• New App Clip issues: ${issues.filter(i => !i.pull_request).length}
+            -  Closed App Clip issues: ${closedIssues.length}
+            - = Open App Clip issues: ${openIssues.length}
+            - =€ New App Clip PRs: ${prs.length}
+            - ( Merged App Clip PRs: ${mergedPRs.length}
+            - =@ Open App Clip PRs: ${openPRs.length}
+            
+            =Ê Issues by App Clip Module:
+            ${Object.entries(moduleStats).map(([module, count]) => 
+              `- ${module}: ${count}`
+            ).join('\n')}`);
+
+  assign-app-clip-reviewers:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' && github.event.action == 'opened'
+    steps:
+      - name: Auto-assign App Clip reviewers
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            
+            // Don't auto-assign if PR is from maintainer
+            if (pr.author_association === 'OWNER' || pr.author_association === 'MEMBER') {
+              return;
+            }
+            
+            // Auto-assign based on App Clip files changed
+            const { data: files } = await github.rest.pulls.listFiles({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pr.number
+            });
+            
+            const reviewers = [];
+            const hasSourceChanges = files.some(file => file.filename.startsWith('Sources/'));
+            const hasTestChanges = files.some(file => file.filename.startsWith('Tests/'));
+            const hasDocsChanges = files.some(file => file.filename.endsWith('.md'));
+            const hasExampleChanges = files.some(file => file.filename.startsWith('Examples/'));
+            const hasCoreChanges = files.some(file => file.filename.includes('AppClipCore'));
+            const hasUIChanges = files.some(file => file.filename.includes('AppClipUI'));
+            
+            if (hasSourceChanges || hasTestChanges || hasExampleChanges) {
+              reviewers.push('muhittincamdali');
+            }
+            
+            if (reviewers.length > 0) {
+              github.rest.pulls.requestReviewers({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: pr.number,
+                reviewers: reviewers
+              });
+            }
+            
+            // Auto-assign App Clip specific labels
+            const labels = [];
+            if (hasSourceChanges) labels.push('code-change');
+            if (hasTestChanges) labels.push('tests');
+            if (hasDocsChanges) labels.push('documentation');
+            if (hasExampleChanges) labels.push('examples');
+            if (hasCoreChanges) labels.push('AppClipCore');
+            if (hasUIChanges) labels.push('AppClipUI');
+            
+            // Add App Clip specific size check label
+            const largeFiles = files.filter(file => file.changes > 100);
+            if (largeFiles.length > 0) {
+              labels.push('size-check-needed');
+            }
+            
+            if (labels.length > 0) {
+              github.rest.issues.addLabels({
+                issue_number: pr.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                labels: labels
+              });
+            }
