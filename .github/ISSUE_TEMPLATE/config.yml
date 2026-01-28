@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 📖 Documentation
+    url: https://github.com/muhittincamdali/AppClipsStudio#readme
+    about: Check out the documentation first
+  - name: 💬 Discussions
+    url: https://github.com/muhittincamdali/AppClipsStudio/discussions
+    about: Ask questions and discuss ideas
