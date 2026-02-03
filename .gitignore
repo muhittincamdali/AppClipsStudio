@@ -2,18 +2,22 @@
 *.xcodeproj/*
 !*.xcodeproj/project.pbxproj
 !*.xcodeproj/xcshareddata/
-!*.xcodeproj/project.xcworkspace/
+!*.xcworkspace/contents.xcworkspacedata
+/*.gcno
+**/xcshareddata/WorkspaceSettings.xcsettings
 
-# User settings
-xcuserdata/
-
-# Build products
-.build/
+# Build
 build/
 DerivedData/
+*.moved-aside
+*.ipa
+*.dSYM.zip
+*.dSYM
 
 # Swift Package Manager
+.build/
 .swiftpm/
+Packages/
 Package.resolved
 
 # CocoaPods
@@ -25,31 +29,17 @@ Carthage/Build/
 # fastlane
 fastlane/report.xml
 fastlane/Preview.html
-fastlane/screenshots/**/*.png
+fastlane/screenshots
 fastlane/test_output
-
-# Code Injection
-iOSInjectionProject/
 
 # macOS
 .DS_Store
-
-# IDEs
-.vscode/
-.idea/
-
-# Temporary files
 *.swp
-*.swo
-*~
+*~.nib
+*.pbxuser
+!default.pbxuser
 
-# Test outputs
-*.coverage
-*.profraw
-
-# Documentation build
-docs/
-
-# Coverage reports
-coverage.lcov
-*.lcov
+# IDE
+*.xcuserstate
+*.xcscmblueprint
+*.idea/
