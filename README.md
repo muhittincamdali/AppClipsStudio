@@ -12,9 +12,11 @@
   <a href="https://github.com/muhittincamdali/AppClipsStudio/actions/workflows/ci.yml">
     <img src="https://github.com/muhittincamdali/AppClipsStudio/actions/workflows/ci.yml/badge.svg" alt="CI Status"/>
   </a>
-  <img src="https://img.shields.io/badge/Swift-6.0-orange.svg" alt="Swift 6.0"/>
-  <img src="https://img.shields.io/badge/iOS-17.0+-blue.svg" alt="iOS 17.0+"/>
-  <img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License"/>
+  <img src="https://img.shields.io/badge/Swift-6.0-FA7343?style=for-the-badge&logo=swift&logoColor=white" alt="Swift 6.0"/>
+  <img src="https://img.shields.io/badge/iOS-17.0+-000000?style=for-the-badge&logo=apple&logoColor=white" alt="iOS 17.0+"/>
+  <img src="https://img.shields.io/badge/App_Clips-Ready-007AFF?style=for-the-badge&logo=apple&logoColor=white" alt="App Clips"/>
+  <img src="https://img.shields.io/badge/SPM-Compatible-FA7343?style=for-the-badge&logo=swift&logoColor=white" alt="SPM"/>
+  <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License"/>
 </p>
 
 <p align="center">
