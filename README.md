@@ -29,6 +29,26 @@
 
 ---
 
+## 📋 Table of Contents
+
+- [Why AppClipsStudio?](#why-appclipsstudio)
+- [Features](#features)
+- [Requirements](#requirements)
+- [Installation](#installation)
+  - [Swift Package Manager](#swift-package-manager)
+  - [CocoaPods](#cocoapods)
+- [Quick Start](#quick-start)
+  - [Create App Clip Target](#1-create-app-clip-target)
+  - [Define Experiences](#2-define-experiences)
+  - [Configure Invocations](#3-configure-invocations)
+- [Components](#components)
+- [Documentation](#documentation)
+- [Contributing](#contributing)
+- [License](#license)
+- [Star History](#-star-history)
+
+---
+
 ## Why AppClipsStudio?
 
 Building App Clips requires managing invocation URLs, handling deep links, creating lightweight experiences, and ensuring <10MB size. **AppClipsStudio** handles all the complexity.
