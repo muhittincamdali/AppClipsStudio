@@ -439,3 +439,15 @@ MIT License - see [LICENSE](LICENSE).
 <p align="center">
   <sub>Build instant experiences ⚡</sub>
 </p>
+
+---
+
+## 📈 Star History
+
+<a href="https://star-history.com/#muhittincamdali/AppClipsStudio&Date">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=muhittincamdali/AppClipsStudio&type=Date&theme=dark" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=muhittincamdali/AppClipsStudio&type=Date" />
+   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=muhittincamdali/AppClipsStudio&type=Date" />
+ </picture>
+</a>
