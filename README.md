@@ -1,7 +1,3 @@
-<p align="center">
-  <img src="Assets/logo.png" alt="AppClipsStudio" width="200"/>
-</p>
-
 <h1 align="center">AppClipsStudio</h1>
 
 <p align="center">
