@@ -31,7 +31,7 @@ public final class AppClipNetworking: ObservableObject {
     // MARK: - Published Properties
     @Published public private(set) var networkState: NetworkState = .unknown
     @Published public private(set) var performanceMetrics: NetworkPerformanceMetrics = NetworkPerformanceMetrics()
-    @Published public private(set) var securityStatus: NetworkSecurityStatus = .unknown
+    // securityStatus removed
     @Published public private(set) var cacheStatus: CacheStatus = CacheStatus()
     @Published public private(set) var activeConnections: [NetworkConnection] = []
     @Published public private(set) var requestQueue: [QueuedRequest] = []
@@ -252,7 +252,7 @@ public final class AppClipNetworking: ObservableObject {
             for (index, request) in requests.enumerated() {
                 group.addTask {
                     await semaphore.acquire()
-                    defer { semaphore.release() }
+                    defer { Task { await semaphore.release() } }
                     
                     do {
                         let result: T = try await self.performRequest(request, as: T.self)
@@ -439,9 +439,7 @@ public final class AppClipNetworking: ObservableObject {
     /// Validate network security status
     public func validateSecurityStatus() async -> NetworkSecurityStatus {
         let status = await securityManager.validateCurrentSecurity()
-        await MainActor.run {
-            securityStatus = status
-        }
+        
         return status
     }
     
@@ -717,7 +715,7 @@ public final class AppClipNetworking: ObservableObject {
             networkState = .disconnected
         }
         
-        logger.info("Network state updated: \(networkState)")
+        logger.info("Network state updated: \(String(describing: self.networkState))")
     }
     
     private func startPerformanceMonitoring() {
@@ -736,9 +734,7 @@ public final class AppClipNetworking: ObservableObject {
         Task {
             await securityManager.initialize()
             let status = await securityManager.validateCurrentSecurity()
-            await MainActor.run {
-                securityStatus = status
-            }
+            
         }
     }
     
@@ -841,7 +837,7 @@ public final class AppClipNetworking: ObservableObject {
         
         // Perform request with retry logic
         let response = try await retryManager.performWithRetry {
-            try await executeRequest(processedRequest)
+            try await self.executeRequest(processedRequest)
         }
         
         // Process response
@@ -992,7 +988,7 @@ public final class AppClipNetworking: ObservableObject {
     
     private func trackCacheHit(for request: NetworkRequest) async {
         await performanceMonitor.recordCacheHit()
-        await analyticsEngine?.trackNetworkEvent(.cacheHit(endpoint: request.endpoint))
+        await analyticsEngine?.trackNetworkEvent(.cacheHit(endpoint: request.endpoint), metadata: [:])
     }
     
     private func trackRequestCompletion(
@@ -1013,7 +1009,7 @@ public final class AppClipNetworking: ObservableObject {
         await analyticsEngine?.trackNetworkEvent(.webSocketMessageSent(
             connectionId: connectionId.uuidString,
             messageType: message.type.rawValue
-        ))
+        ), metadata: [:])
     }
     
     private func determineMimeType(for fileURL: URL) async -> String {
@@ -1485,7 +1481,7 @@ public class WebSocketManager {
         to connectionId: UUID,
         requireConfirmation: Bool
     ) async throws {
-        guard let connection = connections[connectionId] else {
+        guard connections[connectionId] != nil else {
             throw NetworkError.connectionNotFound
         }
         
@@ -1515,9 +1511,10 @@ public class NetworkCacheManager {
         return await withCheckedContinuation { continuation in
             accessQueue.async {
                 let key = self.cacheKey(for: request)
-                if let cachedResponse = self.cache[key],
+                    let _request = request
+                if let cachedResponse = self.cache[key] as CachedResponse?,
                    !cachedResponse.isExpired,
-                   let data = cachedResponse.data,
+                   let data = cachedResponse.data as Data?,
                    let response = try? JSONDecoder().decode(T.self, from: data) {
                     continuation.resume(returning: response)
                 } else {
@@ -1542,6 +1539,7 @@ public class NetworkCacheManager {
             await withCheckedContinuation { continuation in
                 accessQueue.async(flags: .barrier) {
                     let key = self.cacheKey(for: request)
+                    let _request = request
                     self.cache[key] = cachedResponse
                     continuation.resume()
                 }

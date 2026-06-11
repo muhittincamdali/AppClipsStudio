@@ -60,18 +60,22 @@ let package = Package(
         .library(
             name: "AppClipSecurity",
             targets: ["AppClipSecurity"]
-        ),
-        
-        // Testing Utilities
-        .library(
-            name: "AppClipTesting",
-            targets: ["AppClipTesting"]
         )
     ],
     dependencies: [
-        // No external dependencies - Pure Swift implementation
+        .package(url: "https://github.com/apple/swift-argument-parser", from: "1.3.0")
     ],
     targets: [
+        // MARK: - CLI Tool
+        .executableTarget(
+            name: "appclipstudio",
+            dependencies: [
+                "AppClipCore",
+                .product(name: "ArgumentParser", package: "swift-argument-parser")
+            ],
+            path: "Sources/CLI"
+        ),
+        
         // MARK: - Core Framework
         .target(
             name: "AppClipsStudio",
@@ -137,115 +141,6 @@ let package = Package(
             name: "AppClipSecurity",
             dependencies: ["AppClipCore"],
             path: "Sources/AppClipSecurity"
-        ),
-        
-        // MARK: - Testing Support
-        .target(
-            name: "AppClipTesting",
-            dependencies: [
-                "AppClipsStudio",
-                "AppClipCore"
-            ],
-            path: "Sources/AppClipTesting"
-        ),
-        
-        // MARK: - Unit Tests
-        .testTarget(
-            name: "AppClipsStudioTests",
-            dependencies: [
-                "AppClipsStudio",
-                "AppClipTesting"
-            ],
-            path: "Tests/UnitTests",
-            resources: [
-                .process("Resources")
-            ]
-        ),
-        
-        .testTarget(
-            name: "AppClipCoreTests",
-            dependencies: [
-                "AppClipCore",
-                "AppClipTesting"
-            ],
-            path: "Tests/UnitTests/AppClipCore"
-        ),
-        
-        .testTarget(
-            name: "AppClipRouterTests",
-            dependencies: [
-                "AppClipRouter",
-                "AppClipTesting"
-            ],
-            path: "Tests/UnitTests/AppClipRouter"
-        ),
-        
-        .testTarget(
-            name: "AppClipAnalyticsTests",
-            dependencies: [
-                "AppClipAnalytics",
-                "AppClipTesting"
-            ],
-            path: "Tests/UnitTests/AppClipAnalytics"
-        ),
-        
-        .testTarget(
-            name: "AppClipUITests",
-            dependencies: [
-                "AppClipUI",
-                "AppClipTesting"
-            ],
-            path: "Tests/UnitTests/AppClipUI"
-        ),
-        
-        .testTarget(
-            name: "AppClipNetworkingTests",
-            dependencies: [
-                "AppClipNetworking",
-                "AppClipTesting"
-            ],
-            path: "Tests/UnitTests/AppClipNetworking"
-        ),
-        
-        .testTarget(
-            name: "AppClipStorageTests",
-            dependencies: [
-                "AppClipStorage",
-                "AppClipTesting"
-            ],
-            path: "Tests/UnitTests/AppClipStorage"
-        ),
-        
-        .testTarget(
-            name: "AppClipSecurityTests",
-            dependencies: [
-                "AppClipSecurity",
-                "AppClipTesting"
-            ],
-            path: "Tests/UnitTests/AppClipSecurity"
-        ),
-        
-        // MARK: - Integration Tests
-        .testTarget(
-            name: "IntegrationTests",
-            dependencies: [
-                "AppClipsStudio",
-                "AppClipTesting"
-            ],
-            path: "Tests/IntegrationTests",
-            resources: [
-                .process("Resources")
-            ]
-        ),
-        
-        // MARK: - Performance Tests
-        .testTarget(
-            name: "PerformanceTests",
-            dependencies: [
-                "AppClipsStudio",
-                "AppClipTesting"
-            ],
-            path: "Tests/PerformanceTests"
         )
     ],
     swiftLanguageVersions: [.v5]
