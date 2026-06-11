@@ -6,7 +6,13 @@
 
 import Foundation
 import SwiftUI
+import os.log
+import CryptoKit
+
+public enum UserAction: String, Codable, Sendable { case tap, swipe, scroll, click, unknown }
+#if canImport(AppClip)
 import AppClip
+#endif
 
 #if canImport(UIKit)
 import UIKit
@@ -444,7 +450,7 @@ public final class AppClipAIEngine: ObservableObject {
     
     /// Analyze URL patterns using machine learning
     public func analyzeURL(_ url: URL) async -> AIAnalysisResult {
-        logger.ai("Starting AI analysis for URL: \(url.absoluteString)")
+        logger.debug("Starting AI analysis for URL: \(url.absoluteString)")
         
         let startTime = CFAbsoluteTimeGetCurrent()
         
@@ -484,7 +490,7 @@ public final class AppClipAIEngine: ObservableObject {
             }
         }
         
-        logger.ai("AI analysis completed in \(String(format: "%.2f", analysisTime))s with confidence \(String(format: "%.2f", intentPrediction.confidence))")
+        logger.debug("AI analysis completed in \(String(format: "%.2f", analysisTime))s with confidence \(String(format: "%.2f", intentPrediction.confidence))")
         
         return result
     }
@@ -532,7 +538,7 @@ public final class AppClipAIEngine: ObservableObject {
             await mlModel.initialize()
             await predictionEngine.loadModels()
             await optimizationEngine.calibrate()
-            logger.ai("AI Engine initialized successfully")
+            logger.debug("AI Engine initialized successfully")
         }
     }
     
@@ -611,6 +617,8 @@ public final class AppClipAIEngine: ObservableObject {
                 description: "Optimize caching strategy for information content",
                 estimatedImprovement: 0.2
             ))
+        default:
+            break
         }
         
         return suggestions
@@ -909,8 +917,8 @@ public final class PerformanceOptimizationEngine {
         return ResourceRequirements(
             memoryMB: averageRequirements.memory,
             cpuPercentage: averageRequirements.cpu,
-            networkBytes: averageRequirements.network,
-            diskBytes: averageRequirements.disk
+            networkBytes: Int(averageRequirements.network),
+            diskBytes: Int(averageRequirements.disk)
         )
     }
     
@@ -1494,11 +1502,6 @@ extension Array where Element == Double {
     }
 }
 
-extension Array where Element == TimeInterval {
-    public var average: TimeInterval {
-        return isEmpty ? 0 : reduce(0, +) / Double(count)
-    }
-}
 
 // MARK: - Placeholder Classes for ML Models
 
@@ -1722,7 +1725,7 @@ public actor QuantumSecurityEngine: ObservableObject {
     }
     
     public func initialize() async throws {
-        logger.security("Initializing quantum-ready security infrastructure")
+        logger.debug("Initializing quantum-ready security infrastructure")
         
         // Initialize quantum random number generator
         try await quantumRNG.initialize()
@@ -1737,11 +1740,11 @@ public actor QuantumSecurityEngine: ObservableObject {
         try await hsm.initialize()
         
         securityStatus = .active
-        logger.security("✅ Quantum security engine fully initialized")
+        logger.debug("✅ Quantum security engine fully initialized")
     }
     
     public func generateQuantumSafeKey(type: QuantumKeyType) async throws -> QuantumSafeKey {
-        logger.security("Generating quantum-safe key of type: \(type)")
+        logger.debug("Generating quantum-safe key of type: \(String(describing: type))")
         
         let entropy = try await quantumRNG.generateEntropy(bits: 256)
         let keyMaterial = try await postQuantumCrypto.deriveKey(from: entropy, type: type)
@@ -1755,13 +1758,13 @@ public actor QuantumSecurityEngine: ObservableObject {
         )
         
         try await hsm.secureStore(key)
-        logger.security("✅ Quantum-safe key generated and stored securely")
+        logger.debug("✅ Quantum-safe key generated and stored securely")
         
         return key
     }
     
     public func encryptQuantumSafe<T: Codable>(_ data: T, with key: QuantumSafeKey) async throws -> QuantumEncryptedData {
-        logger.security("Performing quantum-safe encryption")
+        logger.debug("Performing quantum-safe encryption")
         
         let jsonData = try JSONEncoder().encode(data)
         let nonce = try await quantumRNG.generateNonce()
@@ -1783,7 +1786,7 @@ public actor QuantumSecurityEngine: ObservableObject {
     }
     
     public func decryptQuantumSafe<T: Codable>(_ encryptedData: QuantumEncryptedData, as type: T.Type) async throws -> T {
-        logger.security("Performing quantum-safe decryption")
+        logger.debug("Performing quantum-safe decryption")
         
         let key = try await hsm.retrieveKey(fingerprint: encryptedData.keyFingerprint)
         
@@ -1798,7 +1801,7 @@ public actor QuantumSecurityEngine: ObservableObject {
     }
     
     public func assessQuantumThreat() async -> QuantumThreatLevel {
-        logger.security("Assessing current quantum threat level")
+        logger.debug("Assessing current quantum threat level")
         
         let factors = QuantumThreatFactors(
             quantumComputingAdvancement: await assessQuantumAdvancement(),
@@ -1808,11 +1811,9 @@ public actor QuantumSecurityEngine: ObservableObject {
         )
         
         let threatLevel = calculateThreatLevel(from: factors)
-        await MainActor.run {
-            self.quantumThreatLevel = threatLevel
-        }
+        self.quantumThreatLevel = threatLevel
         
-        logger.security("Quantum threat level assessed: \(threatLevel)")
+        logger.debug("Quantum threat level assessed: \(String(describing: threatLevel))")
         return threatLevel
     }
     
@@ -1988,7 +1989,7 @@ actor CryptographicEntropyPool {
         try await seedFromHardwareEntropy()
         try await seedFromQuantumEntropy()
         
-        logger.info("✅ Entropy pool initialized with \(entropyPool.count * 8) bits")
+        logger.info("✅ Entropy pool initialized with \(self.entropyPool.count * 8) bits")
     }
     
     func extractEntropy(bits: Int) async throws -> Data {
@@ -2085,7 +2086,7 @@ actor HardwareSecurityModule {
     }
     
     func secureStore(_ key: QuantumSafeKey) async throws {
-        logger.security("Storing quantum-safe key securely")
+        logger.debug("Storing quantum-safe key securely")
         
         // Store in memory cache
         keyStorage[key.fingerprint] = key
@@ -2094,11 +2095,11 @@ actor HardwareSecurityModule {
         let keyData = try JSONEncoder().encode(key)
         try await keychain.set(keyData, key: key.fingerprint)
         
-        logger.security("✅ Key stored securely with fingerprint: \(key.fingerprint)")
+        logger.debug("✅ Key stored securely with fingerprint: \(key.fingerprint)")
     }
     
     func retrieveKey(fingerprint: String) async throws -> QuantumSafeKey {
-        logger.security("Retrieving quantum-safe key")
+        logger.debug("Retrieving quantum-safe key")
         
         // Try memory cache first
         if let cachedKey = keyStorage[fingerprint] {
@@ -2114,17 +2115,17 @@ actor HardwareSecurityModule {
         let key = try JSONDecoder().decode(QuantumSafeKey.self, from: data)
         keyStorage[fingerprint] = key
         
-        logger.security("✅ Key retrieved successfully")
+        logger.debug("✅ Key retrieved successfully")
         return key
     }
     
     func deleteKey(fingerprint: String) async throws {
-        logger.security("Deleting quantum-safe key")
+        logger.debug("Deleting quantum-safe key")
         
         keyStorage.removeValue(forKey: fingerprint)
         try await keychain.remove(fingerprint)
         
-        logger.security("✅ Key deleted successfully")
+        logger.debug("✅ Key deleted successfully")
     }
     
     private func initializeSecureEnclave() async throws {
@@ -2394,7 +2395,6 @@ struct Keychain {
         ]
         
         SecItemDelete(query as CFDictionary)
-    }
     }
 }
 

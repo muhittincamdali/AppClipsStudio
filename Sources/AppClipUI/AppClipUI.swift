@@ -281,7 +281,7 @@ public final class AppClipUI: ObservableObject {
         content: @escaping () -> AnyView,
         style: CardStyle = .default,
         elevation: ElevationLevel = .medium
-    ) -> AppClipCard {
+    ) -> some View {
         return componentFactory.createCard(
             content: content,
             style: style,
@@ -440,7 +440,7 @@ public final class AppClipUI: ObservableObject {
     public func configureDynamicType(
         enableScaling: Bool = true,
         maximumScale: CGFloat = 2.0,
-        customSizes: [DynamicTypeSize: CGFloat] = [:]
+        customSizes: [Int: CGFloat] = [:]
     ) async {
         await dynamicTypeManager.configure(
             enableScaling: enableScaling,
@@ -720,8 +720,8 @@ public final class AppClipUI: ObservableObject {
     public func createToggle(
         isOn: Binding<Bool>,
         title: String,
-        style: ToggleStyle = .switch
-    ) -> AppClipToggle {
+        style: any ToggleStyle
+    ) -> some View {
         return componentFactory.createToggle(
             isOn: isOn,
             title: title,
@@ -735,8 +735,8 @@ public final class AppClipUI: ObservableObject {
     public func createTabView(
         tabs: [TabItem],
         selection: Binding<Int>,
-        style: TabViewStyle = .automatic
-    ) -> AppClipTabView {
+        style: any TabViewStyle
+    ) -> some View {
         return componentFactory.createTabView(
             tabs: tabs,
             selection: selection,
@@ -1013,7 +1013,7 @@ public struct AppClipButton: View {
         }
         
         if style == .destructive {
-            traits.insert(.isDestructive)
+            
         }
         
         return traits
@@ -1452,7 +1452,7 @@ public struct AppClipModal<Content: View>: View {
                     }
                 
                 content()
-                    .background(Color(.systemBackground))
+                    .background(Color.white)
                     .cornerRadius(16)
                     .padding()
             }
@@ -1650,8 +1650,8 @@ public class ComponentFactory: ObservableObject {
     func createToggle(
         isOn: Binding<Bool>,
         title: String,
-        style: ToggleStyle
-    ) -> AppClipToggle {
+        style: any ToggleStyle
+    ) -> some View {
         return AppClipToggle(
             isOn: isOn,
             title: title,
@@ -1662,8 +1662,8 @@ public class ComponentFactory: ObservableObject {
     func createTabView(
         tabs: [TabItem],
         selection: Binding<Int>,
-        style: TabViewStyle
-    ) -> AppClipTabView {
+        style: any TabViewStyle
+    ) -> some View {
         return AppClipTabView(
             tabs: tabs,
             selection: selection,
@@ -1787,7 +1787,7 @@ public class ThemeManager: ObservableObject {
     ) -> ComponentStyle {
         var newStyle = style
         for modification in modifications {
-            newStyle = modification.apply(to: newStyle)
+            newStyle = modification.apply(newStyle)
         }
         return newStyle
     }
@@ -2062,12 +2062,12 @@ public class VoiceOverManager: ObservableObject {
 public class DynamicTypeManager: ObservableObject {
     private var scalingEnabled = true
     private var maximumScale: CGFloat = 2.0
-    private var customSizes: [DynamicTypeSize: CGFloat] = [:]
+    private var customSizes: [Int: CGFloat] = [:]
     
     func configure(
         enableScaling: Bool,
         maximumScale: CGFloat,
-        customSizes: [DynamicTypeSize: CGFloat]
+        customSizes: [Int: CGFloat]
     ) async {
         scalingEnabled = enableScaling
         self.maximumScale = maximumScale
@@ -2498,18 +2498,18 @@ public struct ThemeColors {
             return ThemeColors(
                 primaryColor: .blue,
                 secondaryColor: .gray,
-                tertiaryColor: Color(.systemGray4),
+                tertiaryColor: Color.gray.opacity(0.4),
                 destructiveColor: .red,
                 primaryForegroundColor: .white,
                 secondaryForegroundColor: .white,
                 tertiaryForegroundColor: .primary,
                 destructiveForegroundColor: .white,
-                backgroundColor: Color(.systemBackground),
-                cardBackgroundColor: Color(.secondarySystemBackground),
-                inputBackgroundColor: Color(.tertiarySystemBackground),
+                backgroundColor: Color.white,
+                cardBackgroundColor: Color.gray.opacity(0.1),
+                inputBackgroundColor: Color.gray.opacity(0.2),
                 textColor: .primary,
                 placeholderColor: .secondary,
-                borderColor: Color(.separator),
+                borderColor: Color.gray.opacity(0.3),
                 shadowColor: .black,
                 successColor: .green,
                 warningColor: .orange,
@@ -2519,18 +2519,18 @@ public struct ThemeColors {
             return ThemeColors(
                 primaryColor: .blue,
                 secondaryColor: .gray,
-                tertiaryColor: Color(.systemGray4),
+                tertiaryColor: Color.gray.opacity(0.4),
                 destructiveColor: .red,
                 primaryForegroundColor: .white,
                 secondaryForegroundColor: .white,
                 tertiaryForegroundColor: .primary,
                 destructiveForegroundColor: .white,
-                backgroundColor: Color(.systemBackground),
-                cardBackgroundColor: Color(.secondarySystemBackground),
-                inputBackgroundColor: Color(.tertiarySystemBackground),
+                backgroundColor: Color.white,
+                cardBackgroundColor: Color.gray.opacity(0.1),
+                inputBackgroundColor: Color.gray.opacity(0.2),
                 textColor: .primary,
                 placeholderColor: .secondary,
-                borderColor: Color(.separator),
+                borderColor: Color.gray.opacity(0.3),
                 shadowColor: .black,
                 successColor: .green,
                 warningColor: .orange,
@@ -2540,18 +2540,18 @@ public struct ThemeColors {
             return ThemeColors(
                 primaryColor: .accentColor,
                 secondaryColor: .gray,
-                tertiaryColor: Color(.systemGray4),
+                tertiaryColor: Color.gray.opacity(0.4),
                 destructiveColor: .red,
                 primaryForegroundColor: .white,
                 secondaryForegroundColor: .white,
                 tertiaryForegroundColor: .primary,
                 destructiveForegroundColor: .white,
-                backgroundColor: Color(.systemBackground),
-                cardBackgroundColor: Color(.secondarySystemBackground),
-                inputBackgroundColor: Color(.tertiarySystemBackground),
+                backgroundColor: Color.white,
+                cardBackgroundColor: Color.gray.opacity(0.1),
+                inputBackgroundColor: Color.gray.opacity(0.2),
                 textColor: .primary,
                 placeholderColor: .secondary,
-                borderColor: Color(.separator),
+                borderColor: Color.gray.opacity(0.3),
                 shadowColor: .black,
                 successColor: .green,
                 warningColor: .orange,
@@ -3029,7 +3029,7 @@ public struct AppClipSlider: View {
 public struct AppClipToggle: View {
     @Binding var isOn: Bool
     let title: String
-    let style: ToggleStyle
+    let style: any ToggleStyle
     
     public var body: some View {
         Toggle(title, isOn: $isOn)
@@ -3039,7 +3039,7 @@ public struct AppClipToggle: View {
 public struct AppClipTabView: View {
     let tabs: [TabItem]
     @Binding var selection: Int
-    let style: TabViewStyle
+    let style: any TabViewStyle
     
     public var body: some View {
         TabView(selection: $selection) {
@@ -3114,7 +3114,7 @@ public struct AppClipAlert: View {
             }
         }
         .padding()
-        .background(Color(.systemBackground))
+        .background(Color.white)
         .cornerRadius(12)
     }
 }

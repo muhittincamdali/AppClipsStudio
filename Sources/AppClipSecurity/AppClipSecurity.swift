@@ -247,7 +247,7 @@ public final class AppClipSecurity: ObservableObject {
     
     /// Encrypt sensitive data with quantum-resistant algorithms
     public func encryptData(_ data: Data, with level: EncryptionLevel = .standard) async throws -> EncryptedData {
-        logger.debug("🔐 Encrypting data with level: \(level)")
+        logger.debug("🔐 Encrypting data with level: \(String(describing: level))")
         
         guard securityState == .active else {
             throw SecurityError.systemNotReady
@@ -374,7 +374,7 @@ public final class AppClipSecurity: ObservableObject {
     
     /// Report a security incident
     public func reportIncident(_ incident: SecurityIncident) async {
-        logger.warning("🚨 Security incident reported: \(incident.type)")
+        logger.warning("🚨 Security incident reported: \(String(describing: incident.type))")
         
         await incidentResponseEngine.handleSecurityIncident(incident.type, error: incident.error)
         await auditEngine.logSecurityIncident(incident)
@@ -1056,12 +1056,12 @@ private final class SecurityAuditEngine {
     }
     
     func logSecurityEvent(_ event: SecurityEventType, error: Error? = nil) async {
-        logger.debug("📝 Logging security event: \(event)")
+        logger.debug("📝 Logging security event: \(String(describing: event))")
         // Security event logging implementation
     }
     
     func logSecurityIncident(_ incident: SecurityIncident) async {
-        logger.warning("📝 Logging security incident: \(incident.type)")
+        logger.warning("📝 Logging security incident: \(String(describing: incident.type))")
         // Security incident logging implementation
     }
     
@@ -1116,7 +1116,7 @@ private final class IncidentResponseEngine {
     }
     
     func handleSecurityIncident(_ type: SecurityIncidentType, error: Error? = nil) async {
-        logger.critical("🚨 Handling security incident: \(type)")
+        logger.critical("🚨 Handling security incident: \(String(describing: type))")
         // Security incident handling implementation
     }
     
@@ -1560,7 +1560,7 @@ extension LABiometryType {
             return .faceID
         case .none:
             return .none
-        @unknown default:
+        default:
             return .none
         }
     }

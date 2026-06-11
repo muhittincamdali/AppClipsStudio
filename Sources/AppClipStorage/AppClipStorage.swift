@@ -875,7 +875,7 @@ private final class FileSystemManager {
 
 /// Cache management engine
 @available(iOS 16.0, macOS 13.0, watchOS 9.0, tvOS 16.0, visionOS 1.0, *)
-private final class CacheManager {
+private final class CacheManager: @unchecked Sendable {
     private var cache: [String: CacheEntry] = [:]
     private let logger = Logger(subsystem: "AppClipsStudio", category: "Cache")
     private let accessQueue = DispatchQueue(label: "com.appclipsstudio.cache", attributes: .concurrent)
