@@ -15,6 +15,10 @@
 
 <h1 align="center">AppClipsStudio</h1>
 
+## 🚀 Killer Feature: Strict Binary Size Profiler
+App Clips have a hard 15MB limit. This studio includes an automated `app_clip_analyzer.sh` script that strictly profiles your binary size post-build, ensuring you never cross the Apple threshold when dropping in SwiftNetwork or SwiftCache.
+
+
 <p align="center">
   <strong>📱 Complete App Clips development toolkit for iOS with instant experiences</strong>
 </p>
