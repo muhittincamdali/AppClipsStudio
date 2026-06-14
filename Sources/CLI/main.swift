@@ -1,3 +1,4 @@
+#if os(iOS)
 import Foundation
 import ArgumentParser
 
@@ -79,3 +80,4 @@ struct Optimize: AsyncParsableCommand {
         print("Run `appclipstudio analyze \(targetPath)` to verify new size.")
     }
 }
+#endif
