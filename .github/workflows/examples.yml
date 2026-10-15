@@ -1,0 +1,37 @@
+# Repository-specific: builds the example app and App Clip that the README samples are copied from.
+name: Example app
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: examples-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  build:
+    name: CoffeeShop (iOS)
+    runs-on: macos-26
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Toolchain
+        run: xcodebuild -version
+
+      - name: Build the app and its App Clip
+        working-directory: Examples/CoffeeShop
+        run: |
+          set -o pipefail
+          xcodebuild build -project CoffeeShop.xcodeproj -scheme CoffeeShop \
+            -destination 'generic/platform=iOS Simulator' -skipPackagePluginValidation \
+            -skipMacroValidation CODE_SIGNING_ALLOWED=NO -quiet
