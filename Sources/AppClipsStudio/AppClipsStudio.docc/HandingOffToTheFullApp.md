@@ -5,9 +5,10 @@ over when the full app replaces it.
 
 ## Overview
 
-An App Clip is used once, in a place, for a task. Three things make that moment work: knowing
+An App Clip is used once, in a place, for a task. Four things make that moment work: knowing
 the person is really at the table or store the code belongs to, offering the full app after the
-task is done, and making sure nothing is lost when they install it.
+task is done, telling them when their order is ready, and making sure nothing is lost when they
+install the full app.
 
 ### Confirm the location
 
@@ -43,6 +44,25 @@ After the task is done, show the App Store overlay for the full app:
 OrderConfirmation()
     .fullAppOverlay(isPresented: $showsOverlay)
 ```
+
+### Keep the person informed
+
+An App Clip can schedule or receive notifications for up to 8 hours after each launch without
+asking: set `NSAppClipRequestEphemeralUserNotification` to `true` in the `NSAppClip` dictionary,
+then check that the person didn't turn it off on the App Clip card:
+
+```swift
+let settings = await UNUserNotificationCenter.current().notificationSettings()
+if settings.authorizationStatus == .ephemeral {
+    scheduleOrderReadyNotification()
+}
+```
+
+When the App Clip serves several businesses, give each notification the most specific
+invocation URL as its target content identifier (`target-content-id` in a remote payload,
+`targetContentIdentifier` for a local notification), so the system opens the right App Clip
+instance. A person who opens the App Clip from a notification launches it without an invocation
+URL; restore the last one with ``LastInvocationStore``.
 
 ### Hand data to the full app
 
