@@ -61,11 +61,31 @@ public enum Tool {
 }
 
 extension Encodable {
-    /// Pretty-printed JSON with sorted keys and a final newline.
+    /// Pretty-printed JSON with sorted keys and a final newline, with every control and format
+    /// character inside a string written as a `\u` escape.
     func jsonLine() -> String {
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
         guard let data = try? encoder.encode(self) else { return "{}\n" }
-        return String(decoding: data, as: UTF8.self) + "\n"
+        return escapingHiddenScalars(String(decoding: data, as: UTF8.self)) + "\n"
     }
+}
+
+/// JSONEncoder escapes C0 controls but writes C1 controls (such as U+009B, which terminals read
+/// as an escape sequence), bidirectional overrides and line separators as they are. Outside
+/// strings JSON is ASCII, so every non-ASCII scalar of these categories is inside a string.
+func escapingHiddenScalars(_ json: String) -> String {
+    let hidden: Set<Unicode.GeneralCategory> = [.control, .format, .lineSeparator, .paragraphSeparator]
+    var result = ""
+    result.reserveCapacity(json.utf8.count)
+    for scalar in json.unicodeScalars {
+        guard !scalar.isASCII, hidden.contains(scalar.properties.generalCategory) else {
+            result.unicodeScalars.append(scalar)
+            continue
+        }
+        for unit in String(scalar).utf16 {
+            result += "\\u" + String(format: "%04x", unit)
+        }
+    }
+    return result
 }

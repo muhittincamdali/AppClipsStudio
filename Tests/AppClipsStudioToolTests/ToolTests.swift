@@ -138,6 +138,25 @@ struct ToolTests {
         #expect(findings.first?["severity"] == "suggestion")
     }
 
+    @Test func jsonEscapesC1AndFormatCharacters() throws {
+        let url = "https://example.com/a\u{9B}31m\u{202E}b\u{2028}c\u{E0001}d"
+        let result = Tool.run(["check-url", "--json", url])
+        for hidden in ["\u{9B}", "\u{202E}", "\u{2028}", "\u{E0001}"] {
+            #expect(!result.standardOutput.contains(hidden))
+        }
+        #expect(result.standardOutput.contains(#"\u009b"#))
+        #expect(result.standardOutput.contains(#"\udb40\udc01"#))
+        let reports = try #require(JSONSerialization.jsonObject(with: Data(result.standardOutput.utf8)) as? [[String: Any]])
+        #expect(reports.first?["url"] as? String == url)
+        #expect(escapingHiddenScalars("{\n  \"a\" : \"İ\"\n}") == "{\n  \"a\" : \"İ\"\n}")
+
+        let report = Self.report.replacingOccurrences(of: "ExampleClip-a.ipa", with: "Clip\u{9B}2J\u{202E}.ipa")
+        let size = Tool.run(["size", try file("report.txt", report), "--deployment-target", "16", "--json"])
+        #expect(!size.standardOutput.contains("\u{9B}"))
+        #expect(!size.standardOutput.contains("\u{202E}"))
+        #expect(size.standardOutput.contains(#"Clip\u009b2J\u202e.ipa"#))
+    }
+
     @Test func checkDomain() {
         let ok = Tool.run(["check-domain", "appclips:example.com", "applinks:*.example.com?mode=developer"])
         #expect(ok.exitCode == 0)
