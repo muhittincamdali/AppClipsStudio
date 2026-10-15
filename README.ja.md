@@ -1,4 +1,4 @@
-<!-- i18n-source: README.md@3cf58e24b820b24a8295e661fa1b11e872eb9e84 status=reviewed -->
+<!-- i18n-source: README.md@bc9667a3388772a73b5a72ffeaa8c3343928c884 status=reviewed -->
 <!-- brand:start -->
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/AppClipsStudio/master/.github/brand/banner-ja-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/AppClipsStudio/master/.github/brand/banner-ja-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/AppClipsStudio/master/.github/brand/banner-ja-light.svg" alt="AppClipsStudio: iOS App Clip のための呼び出しルーティング、サイズチェック、Web サイト関連付け。"></picture></p>
@@ -34,7 +34,7 @@ iOS App Clip と、それが属するアプリのための Swift パッケージ
 - **バリアントごとのサイズチェック** — Apple の 10 MB、15 MB、100 MB の上限を、Xcode の `App Thinning Size Report.txt` に含まれる各バリアントへ、iOS バージョン、デプロイメントターゲット、呼び出しの種類ごとに適用し、CI 用の終了ステータスを返します。
 - **Web サイトの関連付け** — `apple-app-site-association` の生成と検証、`appclips:`/`applinks:` の entitlement エントリのチェック、Apple のエンコード規則に基づく App Clip Code URL の検査ができます。
 - **タスクの直後の場面** — 検証済みの 500 m の範囲による位置の確認、フルアプリ向けの App Store オーバーレイ、そして共有 App Group を通じて、バージョン付き・期限付き・サイズ制限付きの値をフルアプリへ渡す `HandoffStore` を備えています。
-- **テスト済み** — 114 件の Swift Testing テストを macOS と iPhone シミュレータで実行します。上記のエッジケースと、下のクイックスタートも含まれます。
+- **テスト済み** — 119 件の Swift Testing テストを macOS と iPhone シミュレータで実行します。上記のエッジケースと、下のクイックスタートも含まれます。
 - **ビルドできるサンプル** — [Examples/CoffeeShop](Examples/CoffeeShop) は、同じソースから作ったアプリとその App Clip です。CI でビルドしており、「使い方」のコード例もここからコピーしています。
 
 ## クイックスタート

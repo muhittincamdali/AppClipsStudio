@@ -1,4 +1,4 @@
-<!-- i18n-source: README.md@3cf58e24b820b24a8295e661fa1b11e872eb9e84 status=reviewed -->
+<!-- i18n-source: README.md@bc9667a3388772a73b5a72ffeaa8c3343928c884 status=reviewed -->
 <!-- brand:start -->
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/AppClipsStudio/master/.github/brand/banner-de-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/AppClipsStudio/master/.github/brand/banner-de-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/AppClipsStudio/master/.github/brand/banner-de-light.svg" alt="AppClipsStudio: Aufruf-Routing, Größenprüfung und Website-Verknüpfung für iOS App Clips."></picture></p>
@@ -53,7 +53,7 @@ Einträge für Associated Domains. Das Paket hat keine Abhängigkeiten.
 - **Der Moment nach der Aufgabe** — Standortbestätigung mit einer validierten Region von 500 m, das
   App-Store-Overlay für die vollständige App und `HandoffStore`, der einen versionierten, ablaufenden
   und in der Größe begrenzten Wert über die gemeinsame App Group an die vollständige App übergibt.
-- **Getestet** — 114 Swift-Testing-Tests laufen auf macOS und in einem iPhone-Simulator, darunter
+- **Getestet** — 119 Swift-Testing-Tests laufen auf macOS und in einem iPhone-Simulator, darunter
   die oben genannten Randfälle und der Schnellstart weiter unten.
 - **Ein Beispiel, das sich bauen lässt** — [Examples/CoffeeShop](Examples/CoffeeShop) ist eine App
   mit ihrem App Clip aus denselben Quellen; CI baut es, und die Beispiele unter Verwendung sind

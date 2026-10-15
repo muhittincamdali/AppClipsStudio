@@ -1,4 +1,4 @@
-<!-- i18n-source: README.md@3cf58e24b820b24a8295e661fa1b11e872eb9e84 status=reviewed -->
+<!-- i18n-source: README.md@bc9667a3388772a73b5a72ffeaa8c3343928c884 status=reviewed -->
 <!-- brand:start -->
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/AppClipsStudio/master/.github/brand/banner-es-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/AppClipsStudio/master/.github/brand/banner-es-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/AppClipsStudio/master/.github/brand/banner-es-light.svg" alt="AppClipsStudio: Enrutamiento de invocaciones, control de tamaño y asociación con tu web para App Clips de iOS."></picture></p>
@@ -54,7 +54,7 @@ las entradas de Associated Domains. El paquete no tiene dependencias.
 - **El momento posterior a la tarea** — confirmación de ubicación con una región validada de
   500 m, el overlay de la App Store para la app completa y `HandoffStore`, que pasa a la app
   completa un valor con versión, caducidad y tamaño limitado a través del App Group compartido.
-- **Probado** — 114 pruebas de Swift Testing se ejecutan en macOS y en un simulador de iPhone,
+- **Probado** — 119 pruebas de Swift Testing se ejecutan en macOS y en un simulador de iPhone,
   incluidos los casos límite anteriores y el inicio rápido de más abajo.
 - **Un ejemplo que compila** — [Examples/CoffeeShop](Examples/CoffeeShop) es una app y su App Clip
   a partir de las mismas fuentes; CI lo compila y los ejemplos de Uso se copian de él.

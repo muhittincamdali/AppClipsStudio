@@ -49,7 +49,7 @@ dependencies.
 - **The moment after the task** — location confirmation with a validated 500 m region, the App
   Store overlay for the full app, and `HandoffStore`, which passes a versioned, expiring,
   size-limited value to the full app through the shared App Group.
-- **Tested** — 114 Swift Testing tests run on macOS and an iPhone simulator, including the edge
+- **Tested** — 119 Swift Testing tests run on macOS and an iPhone simulator, including the edge
   cases above and the quick start below.
 - **An example that builds** — [Examples/CoffeeShop](Examples/CoffeeShop) is an app and its App
   Clip from the same sources; CI builds it, and the Usage samples are copied from it.

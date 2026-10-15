@@ -1,4 +1,4 @@
-<!-- i18n-source: README.md@3cf58e24b820b24a8295e661fa1b11e872eb9e84 status=reviewed -->
+<!-- i18n-source: README.md@bc9667a3388772a73b5a72ffeaa8c3343928c884 status=reviewed -->
 <!-- brand:start -->
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/AppClipsStudio/master/.github/brand/banner-ko-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/AppClipsStudio/master/.github/brand/banner-ko-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/AppClipsStudio/master/.github/brand/banner-ko-light.svg" alt="AppClipsStudio: iOS App Clip을 위한 호출 라우팅, 크기 검사, 웹사이트 연결."></picture></p>
@@ -34,7 +34,7 @@ iOS App Clip과 그것이 속한 앱을 위한 Swift 패키지입니다. 시스�
 - **변형별 크기 검사** — Apple의 10MB, 15MB, 100MB 제한을 Xcode의 `App Thinning Size Report.txt`에 있는 각 변형에 iOS 버전, 배포 대상, 호출 유형별로 적용하고, CI에서 쓸 수 있는 종료 상태를 반환합니다.
 - **웹사이트 연결** — `apple-app-site-association`을 생성하고 검증하며, `appclips:`/`applinks:` entitlement 항목을 확인하고, Apple의 인코딩 규칙에 따라 App Clip Code URL을 점검합니다.
 - **작업이 끝난 직후의 순간** — 검증된 500m 영역으로 위치를 확인하고, 전체 앱을 위한 App Store 오버레이를 보여 주며, 공유 App Group을 통해 버전이 있고 만료되며 크기가 제한된 값을 전체 앱에 전달하는 `HandoffStore`를 제공합니다.
-- **테스트 완료** — 114개의 Swift Testing 테스트를 macOS와 iPhone 시뮬레이터에서 실행하며, 위의 엣지 케이스와 아래의 빠른 시작도 포함합니다.
+- **테스트 완료** — 119개의 Swift Testing 테스트를 macOS와 iPhone 시뮬레이터에서 실행하며, 위의 엣지 케이스와 아래의 빠른 시작도 포함합니다.
 - **빌드되는 예제** — [Examples/CoffeeShop](Examples/CoffeeShop)은 같은 소스로 만든 앱과 그 App Clip입니다. CI에서 빌드하며, 사용법의 예제 코드도 여기에서 가져왔습니다.
 
 ## 빠른 시작

@@ -1,4 +1,4 @@
-<!-- i18n-source: README.md@3cf58e24b820b24a8295e661fa1b11e872eb9e84 status=reviewed -->
+<!-- i18n-source: README.md@bc9667a3388772a73b5a72ffeaa8c3343928c884 status=reviewed -->
 <!-- brand:start -->
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/AppClipsStudio/master/.github/brand/banner-ru-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/AppClipsStudio/master/.github/brand/banner-ru-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/AppClipsStudio/master/.github/brand/banner-ru-light.svg" alt="AppClipsStudio: Маршрутизация вызовов, проверка размера и связь с сайтом для App Clip в iOS."></picture></p>
@@ -54,7 +54,7 @@ Swift-пакет для App Clip в iOS и приложений, к которы
 - **Момент после выполнения задачи** — подтверждение местоположения с проверенной областью в 500 м,
   оверлей App Store для полного приложения и `HandoffStore`, который передаёт полному приложению
   версионированное значение с ограниченным сроком действия и размером через общий App Group.
-- **Протестировано** — 114 тестов Swift Testing выполняются на macOS и в симуляторе iPhone, в том
+- **Протестировано** — 119 тестов Swift Testing выполняются на macOS и в симуляторе iPhone, в том
   числе описанные выше граничные случаи и быстрый старт ниже.
 - **Пример, который собирается** — [Examples/CoffeeShop](Examples/CoffeeShop) — приложение и его
   App Clip из одних и тех же исходников; CI собирает его, а примеры из раздела «Использование»

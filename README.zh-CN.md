@@ -1,4 +1,4 @@
-<!-- i18n-source: README.md@3cf58e24b820b24a8295e661fa1b11e872eb9e84 status=reviewed -->
+<!-- i18n-source: README.md@bc9667a3388772a73b5a72ffeaa8c3343928c884 status=reviewed -->
 <!-- brand:start -->
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/AppClipsStudio/master/.github/brand/banner-zh-CN-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/AppClipsStudio/master/.github/brand/banner-zh-CN-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/AppClipsStudio/master/.github/brand/banner-zh-CN-light.svg" alt="AppClipsStudio: 适用于 iOS App Clip 的调用路由、大小检查和网站关联。"></picture></p>
@@ -43,7 +43,7 @@ Clip Code 的 URL、`apple-app-site-association` 文件以及 Associated Domains
   条目，并按 Apple 的编码规则检查 App Clip Code 的 URL。
 - **任务完成之后的那一刻** — 带有已校验的 500 米范围的位置确认、用于完整 App 的 App Store 覆盖层，以及
   `HandoffStore`：它通过共享的 App Group，把带版本号、会过期、有大小限制的值交给完整 App。
-- **经过测试** — 114 个 Swift Testing 测试在 macOS 和 iPhone 模拟器上运行，其中包括上述边界情况和下面的快速开始。
+- **经过测试** — 119 个 Swift Testing 测试在 macOS 和 iPhone 模拟器上运行，其中包括上述边界情况和下面的快速开始。
 - **可以构建的示例** — [Examples/CoffeeShop](Examples/CoffeeShop) 用同一份源码构建出一个 App 及其 App
   Clip；CI 会构建它，“使用方法”中的示例代码也都是从中复制的。
 

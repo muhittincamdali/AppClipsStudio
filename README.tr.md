@@ -1,4 +1,4 @@
-<!-- i18n-source: README.md@3cf58e24b820b24a8295e661fa1b11e872eb9e84 status=reviewed -->
+<!-- i18n-source: README.md@bc9667a3388772a73b5a72ffeaa8c3343928c884 status=reviewed -->
 <!-- brand:start -->
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/AppClipsStudio/master/.github/brand/banner-tr-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/AppClipsStudio/master/.github/brand/banner-tr-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/AppClipsStudio/master/.github/brand/banner-tr-light.svg" alt="AppClipsStudio: iOS App Clip'leri için çağrı yönlendirme, boyut denetimi ve web sitesi ilişkilendirme."></picture></p>
@@ -54,7 +54,7 @@ bağımlılığı yoktur.
 - **Görevden sonraki an** — doğrulanmış 500 m'lik bir bölgeyle konum doğrulama, tam uygulama için
   App Store overlay'i ve paylaşılan App Group üzerinden tam uygulamaya sürümlü, süresi dolan,
   boyutu sınırlı bir değer ileten `HandoffStore`.
-- **Test edilmiş** — macOS'ta ve bir iPhone simülatöründe 114 Swift Testing testi çalışır; bunlar
+- **Test edilmiş** — macOS'ta ve bir iPhone simülatöründe 119 Swift Testing testi çalışır; bunlar
   yukarıdaki uç durumları ve aşağıdaki hızlı başlangıcı da kapsar.
 - **Derlenen bir örnek** — [Examples/CoffeeShop](Examples/CoffeeShop), aynı kaynaklardan oluşan
   bir uygulama ve App Clip'idir; CI onu derler ve Kullanım bölümündeki örnekler ondan
