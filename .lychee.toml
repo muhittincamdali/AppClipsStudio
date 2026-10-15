@@ -1,0 +1,59 @@
+# Link check settings shared by every repository (links.yml writes this file when a repository
+# has none). Keep the exclusions short and explain each one: a link that is excluded is a link
+# nobody checks.
+
+# Re-check a link at most once a day; the cache is kept between workflow runs.
+cache = true
+max_cache_age = "1d"
+cache_exclude_status = "429, 500.."
+
+max_concurrency = 8
+max_retries = 3
+timeout = 20
+
+# Anchors (#section) in Markdown and HTML files must exist, so README buttons and the table of
+# contents cannot point at a renamed heading.
+include_fragments = "anchor-only"
+
+# Only a 2xx answer, after redirects, passes. A 403 or 429 is reported too: an accepted 403 would
+# also hide a page that was made private, and a rate-limited link is retried (max_retries) and
+# never cached (cache_exclude_status), so the next run checks it again.
+accept = ["200..=299"]
+
+exclude_loopback = true
+exclude_private = true
+exclude_link_local = true
+
+exclude = [
+  # Sites that answer automated requests with 999 or a sign-in wall.
+  '^https://(www\.)?linkedin\.com/',
+  '^https://(www\.)?x\.com/',
+  # Placeholder hosts used in code samples.
+  '^https?://(www\.)?example\.(com|org|net)',
+  '^https?://api\.example\.com',
+  # Pull request and comparison pages that only exist after a push.
+  '^https://github\.com/[^/]+/[^/]+/compare/',
+]
+
+remap = [
+  '^https://raw\.githubusercontent\.com/muhittincamdali/AppClipsStudio/master/(.*)$ file:///home/runner/work/AppClipsStudio/AppClipsStudio/$1',
+  '^https://github\.com/muhittincamdali/AppClipsStudio/(?:blob|tree)/master/(.*)$ file:///home/runner/work/AppClipsStudio/AppClipsStudio/$1',
+  # The DocC site on GitHub Pages is built from the .docc catalog by docs.yml after a push to
+  # master, so a pull request links to pages that are not online yet, and the push that first
+  # deploys the site runs this check before the deployment finishes. Each documentation URL,
+  # including the root, is checked against its source file instead; docs.yml fails when the
+  # build or the deployment fails, which covers the live site.
+  '^https://muhittincamdali\.github\.io/AppClipsStudio/documentation/appclipsstudio/$ file:///home/runner/work/AppClipsStudio/AppClipsStudio/Sources/AppClipsStudio/AppClipsStudio.docc/AppClipsStudio.md',
+  '^https://muhittincamdali\.github\.io/AppClipsStudio/documentation/appclipsstudio/gettingstarted$ file:///home/runner/work/AppClipsStudio/AppClipsStudio/Sources/AppClipsStudio/AppClipsStudio.docc/GettingStarted.md',
+  '^https://muhittincamdali\.github\.io/AppClipsStudio/documentation/appclipsstudio/routinginvocations$ file:///home/runner/work/AppClipsStudio/AppClipsStudio/Sources/AppClipsStudio/AppClipsStudio.docc/RoutingInvocations.md',
+  '^https://muhittincamdali\.github\.io/AppClipsStudio/documentation/appclipsstudio/checkingappclipsize$ file:///home/runner/work/AppClipsStudio/AppClipsStudio/Sources/AppClipsStudio/AppClipsStudio.docc/CheckingAppClipSize.md',
+  '^https://muhittincamdali\.github\.io/AppClipsStudio/documentation/appclipsstudio/associatingyourwebsite$ file:///home/runner/work/AppClipsStudio/AppClipsStudio/Sources/AppClipsStudio/AppClipsStudio.docc/AssociatingYourWebsite.md',
+  '^https://muhittincamdali\.github\.io/AppClipsStudio/documentation/appclipsstudio/handingofftothefullapp$ file:///home/runner/work/AppClipsStudio/AppClipsStudio/Sources/AppClipsStudio/AppClipsStudio.docc/HandingOffToTheFullApp.md',
+]
+
+exclude_path = [
+  "node_modules",
+  ".build",
+  "build",
+  "Pods",
+]

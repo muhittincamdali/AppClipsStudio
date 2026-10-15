@@ -1,0 +1,107 @@
+{
+  "name": "AppClipsStudio",
+  "repository": "muhittincamdali/AppClipsStudio",
+  "branch": "master",
+  "tagline": {
+    "en": "Invocation routing, size checks and website association for iOS App Clips.",
+    "tr": "iOS App Clip'leri için çağrı yönlendirme, boyut denetimi ve web sitesi ilişkilendirme.",
+    "zh-CN": "适用于 iOS App Clip 的调用路由、大小检查和网站关联。",
+    "ja": "iOS App Clip のための呼び出しルーティング、サイズチェック、Web サイト関連付け。",
+    "ko": "iOS App Clip을 위한 호출 라우팅, 크기 검사, 웹사이트 연결.",
+    "es": "Enrutamiento de invocaciones, control de tamaño y asociación con tu web para App Clips de iOS.",
+    "de": "Aufruf-Routing, Größenprüfung und Website-Verknüpfung für iOS App Clips.",
+    "fr": "Routage des invocations, contrôle de taille et association au site web pour les App Clips iOS.",
+    "pt-BR": "Roteamento de invocações, verificação de tamanho e associação ao site para App Clips do iOS.",
+    "ru": "Маршрутизация вызовов, проверка размера и связь с сайтом для App Clip в iOS."
+  },
+  "tags": {
+    "en": [
+      "App Clips",
+      "Swift 6",
+      "iOS 16+",
+      "CLI included"
+    ],
+    "tr": [
+      "App Clips",
+      "Swift 6",
+      "iOS 16+",
+      "CLI dahil"
+    ],
+    "zh-CN": [
+      "App Clips",
+      "Swift 6",
+      "iOS 16+",
+      "含命令行工具"
+    ],
+    "ja": [
+      "App Clips",
+      "Swift 6",
+      "iOS 16+",
+      "CLI 付き"
+    ],
+    "ko": [
+      "App Clips",
+      "Swift 6",
+      "iOS 16+",
+      "CLI 포함"
+    ],
+    "es": [
+      "App Clips",
+      "Swift 6",
+      "iOS 16+",
+      "Incluye CLI"
+    ],
+    "de": [
+      "App Clips",
+      "Swift 6",
+      "iOS 16+",
+      "Mit CLI"
+    ],
+    "fr": [
+      "App Clips",
+      "Swift 6",
+      "iOS 16+",
+      "CLI incluse"
+    ],
+    "pt-BR": [
+      "App Clips",
+      "Swift 6",
+      "iOS 16+",
+      "Inclui CLI"
+    ],
+    "ru": [
+      "App Clips",
+      "Swift 6",
+      "iOS 16+",
+      "С CLI"
+    ]
+  },
+  "motif": "phone",
+  "buttons": [
+    "start",
+    "docs",
+    "examples"
+  ],
+  "links": {
+    "docs": "https://muhittincamdali.github.io/AppClipsStudio/documentation/appclipsstudio/",
+    "examples": "Examples/"
+  },
+  "languages": [
+    "en",
+    "tr",
+    "zh-CN",
+    "ja",
+    "ko",
+    "es",
+    "de",
+    "fr",
+    "pt-BR",
+    "ru"
+  ],
+  "docc": {
+    "targets": [
+      "AppClipsStudio"
+    ]
+  },
+  "socialTheme": "dark"
+}

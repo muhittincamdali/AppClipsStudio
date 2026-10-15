@@ -1,490 +1,375 @@
-<p align="center">
-  <img src="https://img.shields.io/badge/Swift-6.0-FA7343?style=for-the-badge&logo=swift&logoColor=white" alt="Swift 6.0"/>
-  <img src="https://img.shields.io/badge/Platform-iOS%20|%20macOS%20|%20visionOS-007AFF?style=for-the-badge&logo=apple&logoColor=white" alt="Platform"/>
-  <img src="https://img.shields.io/badge/Standard-Unified%20Core-5856D6?style=for-the-badge" alt="Standard"/>
-</p>
+<!-- brand:start -->
 
----
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/AppClipsStudio/master/.github/brand/banner-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/AppClipsStudio/master/.github/brand/banner-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/AppClipsStudio/master/.github/brand/banner-light.svg" alt="AppClipsStudio: Invocation routing, size checks and website association for iOS App Clips."></picture></p>
 
-> **🛡️ PART OF THE 2026 UNIFIED CORE**
-> This repository is a verified component of 'The Endless March' initiative. Purified for Swift 6, zero-dependency, and engineered for maximum hardware saturation.
-> 
-> *Flagship Engines:* [SwiftNetwork](https://github.com/muhittincamdali/SwiftNetwork) | [SwiftAI](https://github.com/muhittincamdali/SwiftAI) | [LiquidGlassKit](https://github.com/muhittincamdali/LiquidGlassKit)
-
----
-
-<h1 align="center">AppClipsStudio</h1>
-
-## 🚀 Killer Feature: Strict Binary Size Profiler
-App Clips have a hard 15MB limit. This studio includes an automated `app_clip_analyzer.sh` script that strictly profiles your binary size post-build, ensuring you never cross the Apple threshold when dropping in SwiftNetwork or SwiftCache.
-
+<!-- lang-selector:start -->
+<p align="center"><a href="README.md">English</a> · <a href="README.tr.md">Türkçe</a> · <a href="README.zh-CN.md">简体中文</a> · <a href="README.ja.md">日本語</a> · <a href="README.ko.md">한국어</a> · <a href="README.es.md">Español</a> · <a href="README.de.md">Deutsch</a> · <a href="README.fr.md">Français</a> · <a href="README.pt-BR.md">Português (Brasil)</a> · <a href="README.ru.md">Русский</a></p>
+<!-- lang-selector:end -->
 
 <p align="center">
-  <strong>📱 Complete App Clips development toolkit for iOS with instant experiences</strong>
+<a href="https://github.com/muhittincamdali/AppClipsStudio/actions/workflows/ci.yml"><img src="https://github.com/muhittincamdali/AppClipsStudio/actions/workflows/ci.yml/badge.svg" alt="CI status"></a>
+<a href="https://github.com/muhittincamdali/AppClipsStudio/releases"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/AppClipsStudio/master/.github/brand/badge-version-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/AppClipsStudio/master/.github/brand/badge-version-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/AppClipsStudio/master/.github/brand/badge-version-light.svg" alt="Latest version: v1.0.0"></picture></a>
+<a href="https://github.com/muhittincamdali/AppClipsStudio/blob/master/Package.swift"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/AppClipsStudio/master/.github/brand/badge-platforms-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/AppClipsStudio/master/.github/brand/badge-platforms-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/AppClipsStudio/master/.github/brand/badge-platforms-light.svg" alt="Supported platforms: iOS 16+ · macOS 13+"></picture></a>
+<a href="https://github.com/muhittincamdali/AppClipsStudio/blob/master/Package.swift"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/AppClipsStudio/master/.github/brand/badge-language-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/AppClipsStudio/master/.github/brand/badge-language-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/AppClipsStudio/master/.github/brand/badge-language-light.svg" alt="Language version: Swift 6.2+"></picture></a>
+<a href="https://github.com/muhittincamdali/AppClipsStudio/blob/master/LICENSE"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/AppClipsStudio/master/.github/brand/badge-license-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/AppClipsStudio/master/.github/brand/badge-license-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/AppClipsStudio/master/.github/brand/badge-license-light.svg" alt="License: MIT"></picture></a>
 </p>
 
 <p align="center">
-  <a href="https://github.com/muhittincamdali/AppClipsStudio/actions/workflows/ci.yml">
-    <img src="https://github.com/muhittincamdali/AppClipsStudio/actions/workflows/ci.yml/badge.svg" alt="CI Status"/>
-  </a>
-  <img src="https://img.shields.io/badge/Swift-6.0-FA7343?style=for-the-badge&logo=swift&logoColor=white" alt="Swift 6.0"/>
-  <img src="https://img.shields.io/badge/iOS-17.0+-000000?style=for-the-badge&logo=apple&logoColor=white" alt="iOS 17.0+"/>
-  <img src="https://img.shields.io/badge/App_Clips-Ready-007AFF?style=for-the-badge&logo=apple&logoColor=white" alt="App Clips"/>
-  <img src="https://img.shields.io/badge/SPM-Compatible-FA7343?style=for-the-badge&logo=swift&logoColor=white" alt="SPM"/>
-  <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License"/>
+<a href="#quick-start"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/AppClipsStudio/master/.github/brand/button-start-en-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/AppClipsStudio/master/.github/brand/button-start-en-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/AppClipsStudio/master/.github/brand/button-start-en-light.svg" alt="Get started"></picture></a>
+<a href="https://muhittincamdali.github.io/AppClipsStudio/documentation/appclipsstudio/"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/AppClipsStudio/master/.github/brand/button-docs-en-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/AppClipsStudio/master/.github/brand/button-docs-en-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/AppClipsStudio/master/.github/brand/button-docs-en-light.svg" alt="Documentation"></picture></a>
+<a href="https://github.com/muhittincamdali/AppClipsStudio/tree/master/Examples"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/muhittincamdali/AppClipsStudio/master/.github/brand/button-examples-en-dark.svg"><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/muhittincamdali/AppClipsStudio/master/.github/brand/button-examples-en-light.svg"><img src="https://raw.githubusercontent.com/muhittincamdali/AppClipsStudio/master/.github/brand/button-examples-en-light.svg" alt="Examples"></picture></a>
 </p>
 
-<p align="center">
-  <a href="#features">Features</a> •
-  <a href="#installation">Installation</a> •
-  <a href="#quick-start">Quick Start</a> •
-  <a href="#components">Components</a> •
-  <a href="#documentation">Documentation</a>
-</p>
+<!-- brand:end -->
 
----
+A Swift package for iOS App Clips and the apps they belong to. It validates the invocation URL
+the system passes at launch and routes it to your screens the way App Store Connect routes it to
+App Clip experiences, confirms the person is where the code is, and hands the App Clip's data to
+the full app. Its `appclipstudio` command-line tool checks what App Store Connect and the system
+will check before you upload: each variant's size, App Clip Code URLs, the
+`apple-app-site-association` file and Associated Domains entries. The package has no
+dependencies.
 
-## 📋 Table of Contents
+## Highlights
 
-- [Why AppClipsStudio?](#why-appclipsstudio)
-- [Features](#features)
-- [Requirements](#requirements)
-- [Installation](#installation)
-  - [Swift Package Manager](#swift-package-manager)
-  - [CocoaPods](#cocoapods)
-- [Quick Start](#quick-start)
-  - [Create App Clip Target](#1-create-app-clip-target)
-  - [Define Experiences](#2-define-experiences)
-  - [Configure Invocations](#3-configure-invocations)
-- [Components](#components)
-- [Documentation](#documentation)
-- [Contributing](#contributing)
-- [License](#license)
-- [Star History](#-star-history)
+- **Invocation routing with Apple's matching rule** — patterns such as `/table/:number` and
+  `/shop/*`; the most specific prefix wins, as in App Store Connect, and a fallback covers the
+  rest of a registered prefix, which Apple requires an App Clip and its full app to handle.
+  Default App Clip links (`https://appclip.apple.com/id?p=…`) are recognized.
+- **Untrusted input stays bounded** — invocation URLs are checked for scheme, host, length,
+  path and query size, and `.`/`..` components before your code sees them; numbers parse
+  without trapping; size reports reject `nan`, `inf` and `1e999`; files are read with a limit;
+  the folder scan doesn't follow symbolic links; output never echoes control characters.
+- **Size checks per variant** — Apple's 10, 15 and 100 MB limits applied to each variant of
+  Xcode's `App Thinning Size Report.txt` by iOS version, deployment target and invocation type,
+  with an exit status for CI.
+- **Website association** — generate and validate `apple-app-site-association`, check
+  `appclips:`/`applinks:` entitlement entries, and lint App Clip Code URLs against Apple's
+  encoding rules.
+- **The moment after the task** — location confirmation with a validated 500 m region, the App
+  Store overlay for the full app, and `HandoffStore`, which passes a versioned, expiring,
+  size-limited value to the full app through the shared App Group.
+- **Tested** — 114 Swift Testing tests run on macOS and an iPhone simulator, including the edge
+  cases above and the quick start below.
+- **An example that builds** — [Examples/CoffeeShop](Examples/CoffeeShop) is an app and its App
+  Clip from the same sources; CI builds it, and the Usage samples are copied from it.
 
----
+## Quick start
 
-## Why AppClipsStudio?
+**1. Add the package**
 
-Building App Clips requires managing invocation URLs, handling deep links, creating lightweight experiences, and ensuring <10MB size. **AppClipsStudio** handles all the complexity.
+In Xcode, choose **File › Add Package Dependencies…** and enter the repository URL:
+
+```text
+https://github.com/muhittincamdali/AppClipsStudio.git
+```
+
+Leave **Dependency Rule** at **Up to Next Major Version** from `2.0.0` and click **Add
+Package**. In the next window, choose your App Clip target next to **AppClipsStudio** and click
+**Add Package** again. (If your project has no App Clip yet, add one with **File › New ›
+Target… › App Clip**; add the package to the full app target too.)
+
+**2. Route the invocation**
+
+Replace everything in the App Clip's `ContentView.swift` with:
 
 ```swift
-// Define your App Clip in seconds
-@main
-struct MyAppClip: AppClip {
-    var body: some Scene {
-        AppClipScene { invocation in
-            switch invocation.experience {
-            case .orderFood(let restaurantId):
-                OrderView(restaurant: restaurantId)
-            case .rentBike(let stationId):
-                BikeRentalView(station: stationId)
+import AppClipsStudio
+import SwiftUI
+
+enum Screen: Equatable {
+    case welcome
+    case table(Int)
+}
+
+struct ContentView: View {
+    @State private var screen = Screen.welcome
+
+    var body: some View {
+        Group {
+            switch screen {
+            case .welcome: Text("Scan a table tag")
+            case .table(let number): Text("Table \(number)")
             }
         }
+        .font(.largeTitle)
+        .onInvocation { invocation in
+            screen = (try? Self.router.route(invocation)) ?? .welcome
+        }
     }
+
+    static let router: InvocationRouter<Screen> = {
+        var router = InvocationRouter<Screen>()
+        try? router.add("/table/:number") { match in
+            match.integer("number").map(Screen.table)
+        }
+        router.fallback { _ in .welcome }
+        return router
+    }()
 }
 ```
 
-## Features
+**3. Run it with an invocation URL**
 
-| Feature | Description |
-|---------|-------------|
-| 🚀 **Quick Setup** | App Clip target in minutes |
-| 🔗 **Smart Invocations** | NFC, QR, Safari, Maps, Messages |
-| 📍 **Location Verification** | Confirm user is at location |
-| 💳 **Apple Pay Ready** | One-tap payments |
-| 🔐 **Sign in with Apple** | Seamless authentication |
-| 📦 **Size Optimizer** | Keep under 10MB limit |
-| 🧪 **Testing Tools** | Local & TestFlight testing |
-| 📊 **Analytics** | Clip performance metrics |
+Choose **Product › Scheme › Edit Scheme…**, select **Run › Arguments**, and set the
+`_XCAppClipURL` environment variable (Xcode adds it to every App Clip scheme) to
+`https://appclip.example.com/table/12`. Choose an iPhone simulator and press **Run** (⌘R). The
+App Clip shows "Table 12"; with `/table/twelve` or no path it shows "Scan a table tag".
+
+The same code is compiled and tested in
+[`Tests/AppClipsStudioTests/ReadmeQuickStartTests.swift`](Tests/AppClipsStudioTests/ReadmeQuickStartTests.swift).
 
 ## Installation
 
 ### Swift Package Manager
 
+Add the library to your App Clip and full app targets in Xcode as in the quick start, or in
+`Package.swift`:
+
 ```swift
 dependencies: [
-    .package(url: "https://github.com/muhittincamdali/AppClipsStudio.git", from: "1.0.0")
+    .package(url: "https://github.com/muhittincamdali/AppClipsStudio.git", from: "2.0.0")
+],
+targets: [
+    .target(name: "YourAppFeature", dependencies: [
+        .product(name: "AppClipsStudio", package: "AppClipsStudio")
+    ])
 ]
 ```
 
-## Quick Start
+### Command-line tool
 
-### 1. Create App Clip Target
-
-```bash
-# Using CLI
-appclipstudio init --name "MyAppClip" --bundleId "com.myapp.clip"
+```sh
+git clone https://github.com/muhittincamdali/AppClipsStudio.git
+cd AppClipsStudio
+swift build -c release
+cp .build/release/appclipstudio /usr/local/bin/   # or run it with `swift run appclipstudio`
 ```
 
-Or in Xcode: File → New → Target → App Clip
+Version 2.0.0 (October 2026) is the first release of this code. The earlier release, 1.0.0
+(February 2026), described modules that were never implemented; in June 2026 they were reduced
+to stubs, and in October 2026 the package was rewritten from Apple's App Clip documentation.
+[CHANGELOG.md](CHANGELOG.md) lists what changed.
 
-### 2. Define Experiences
+## Usage
+
+The samples below are copied from the example app in
+[`Examples/CoffeeShop`](Examples/CoffeeShop), which CI builds.
+
+### Routes
+
+From [`Shared/CoffeeRoutes.swift`](Examples/CoffeeShop/Shared/CoffeeRoutes.swift): a table tag,
+a poster code and the default App Clip link, with the menu for every other URL.
 
 ```swift
-import AppClipsStudio
+var router = InvocationRouter<CoffeeScreen>(
+    allowedHosts: ["appclip.example.com", "example.com", Invocation.defaultLinkHost]
+)
+try router.add("/table/:number") { match in
+    guard let number = match.integer("number"), (1...99).contains(number),
+          let store = match.queryInteger("p").flatMap(Catalog.store(id:)) else { return nil }
+    return .table(store, number: number)
+}
+try router.add("/order") { match in
+    match.queryInteger("p").flatMap(Catalog.drink(id:)).map(CoffeeScreen.drink)
+}
+try router.add("appclip.apple.com/id") { match in
+    match.queryInteger("drink").flatMap(Catalog.drink(id:)).map(CoffeeScreen.drink)
+}
+router.fallback { _ in .menu }
+```
 
-enum ClipExperience: AppClipExperience {
-    case orderFood(restaurantId: String)
-    case viewMenu(restaurantId: String)
-    case payBill(tableId: String)
-    
-    static func parse(from url: URL) -> ClipExperience? {
-        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: true) else {
-            return nil
-        }
-        
-        switch components.path {
-        case "/order":
-            return .orderFood(restaurantId: components.queryValue("id") ?? "")
-        case "/menu":
-            return .viewMenu(restaurantId: components.queryValue("id") ?? "")
-        case "/pay":
-            return .payBill(tableId: components.queryValue("table") ?? "")
-        default:
-            return nil
-        }
+A handler that returns `nil` (an unknown store, a table number out of range) lets the next
+route try, and finally the fallback.
+
+### Launches without a URL
+
+From [`Shared/CoffeeModel.swift`](Examples/CoffeeShop/Shared/CoffeeModel.swift). A person who
+returns from a notification or the App Switcher launches the App Clip without a URL, so each
+invocation is saved and restored:
+
+```swift
+func handle(_ invocation: Invocation) {
+    do {
+        screen = try router.route(invocation) ?? .menu
+        lastInvocation.save(invocation)
+        rejection = nil
+    } catch {
+        rejection = error
     }
 }
 ```
 
-### 3. Build Your UI
+### Location confirmation and the App Store overlay
+
+From [`Shared/RootView.swift`](Examples/CoffeeShop/Shared/RootView.swift), App Clip only (the
+`APPCLIP` compilation condition):
 
 ```swift
-struct OrderView: View {
-    let restaurantId: String
-    @StateObject private var viewModel = OrderViewModel()
-    
-    var body: some View {
-        VStack {
-            RestaurantHeader(id: restaurantId)
-            MenuList(items: viewModel.menuItems)
-            
-            AppClipPayButton(amount: viewModel.total) {
-                await viewModel.checkout()
-            }
-        }
-        .appClipOverlay() // Shows "Get the Full App" banner
+.onContinueUserActivity(NSUserActivityTypeBrowsingWeb) { activity in
+    guard let invocation = try? Invocation(userActivity: activity) else { return }
+    model.handle(invocation)
+    if let payload = activity.appClipActivationPayload {
+        Task { await model.confirmLocation(with: payload) }
     }
 }
+.fullAppOverlay(isPresented: $model.showsFullAppOverlay)
 ```
-
-## Invocation Methods
-
-### NFC Tags
 
 ```swift
-// Generate NFC payload
-let nfcData = AppClipNFC.generate(
-    url: "https://myapp.com/order?id=123",
-    experience: .orderFood
-)
-
-// Write to NFC tag
-try await NFCWriter.write(nfcData, to: tag)
+func confirmLocation(with payload: APActivationPayload) async {
+    guard case .table(let store, _) = screen else { return }
+    confirmation = await payload.confirm(store.location)
+}
 ```
 
-### QR Codes
+Each store's `location` is an `ExpectedLocation`, which only accepts finite coordinates in
+range and a radius greater than 0 and at most 500 meters, Apple's limit.
+
+### Handing the order to the full app
 
 ```swift
-// Generate App Clip QR code
-let qrCode = AppClipQR.generate(
-    url: "https://myapp.com/menu?id=456",
-    size: CGSize(width: 200, height: 200),
-    style: .appClipCode // Special Apple design
-)
-
-Image(uiImage: qrCode)
-```
-
-### App Clip Codes
-
-```swift
-// Generate official App Clip Code
-let clipCode = try await AppClipCode.request(
-    url: "https://myapp.com/experience",
-    style: .camera, // or .nfc
-    color: .blue
-)
-```
-
-### Safari Smart Banner
-
-```html
-<meta name="apple-itunes-app" 
-      content="app-id=123456789, 
-               app-clip-bundle-id=com.myapp.clip,
-               app-clip-display=card">
-```
-
-### Maps Integration
-
-```swift
-// Register location-based experience
-AppClipLocation.register(
-    experience: .orderFood,
-    coordinate: CLLocationCoordinate2D(latitude: 37.33, longitude: -122.03),
-    radius: 100 // meters
-)
-```
-
-## Components
-
-### AppClipPayButton
-
-One-tap Apple Pay:
-
-```swift
-AppClipPayButton(
-    amount: 29.99,
-    currency: .usd,
-    label: "Order Coffee"
-) { result in
-    switch result {
-    case .success(let payment):
-        await processPayment(payment)
-    case .failure(let error):
-        showError(error)
+func placeOrder() {
+    var order = PlacedOrder(drinkIDs: cart.map(\.id), placedAt: Date())
+    if case .table(let store, let number) = screen {
+        order.storeID = store.id
+        order.table = number
     }
+    try? handoff?.save(order, expiresAfter: 30 * 24 * 60 * 60)
+    placedOrder = order
+    cart = []
+    #if APPCLIP
+    showsFullAppOverlay = true
+    #endif
+}
+
+/// In the full app: takes the order the App Clip left, once.
+func importHandoff() {
+    importedOrder = try? handoff?.take()
 }
 ```
 
-### AppClipSignInButton
+`handoff` is a `HandoffStore<PlacedOrder>` on the App Group's `UserDefaults` suite, shared by
+both targets.
 
-Seamless authentication:
+## Command-line tool
 
-```swift
-AppClipSignInButton { result in
-    switch result {
-    case .success(let credential):
-        await createAccount(credential)
-    case .failure(let error):
-        showError(error)
-    }
-}
+Check every variant of an exported App Clip (the exit status is 1 when one is over its limit):
+
+```text
+$ appclipstudio size "App Thinning Size Report.txt" --deployment-target 16.0
+App Clip size check (iOS 16+, physical and digital invocations)
+  ok   ExampleClip-a.ipa  14.60 MB of 15.00 MB
+  OVER ExampleClip-b.ipa  15.20 MB of 15.00 MB
+1 of 2 variants are over the limit.
 ```
 
-### LocationVerification
+Check URLs for App Clip Codes:
 
-Confirm user location:
-
-```swift
-LocationVerification(
-    coordinate: restaurantLocation,
-    radius: 50
-) { verified in
-    if verified {
-        showOrderOptions()
-    } else {
-        showLocationError()
-    }
-}
+```text
+$ appclipstudio check-url https://www.example.com/products/
+https://www.example.com/products/
+  suggestion: Remove the "www" subdomain if your site allows it.
+  suggestion: Remove the trailing "/".
 ```
 
-### AppClipOverlay
+Generate and validate the association file, and check entitlement entries:
 
-Promote full app:
-
-```swift
-ContentView()
-    .appClipOverlay(
-        title: "Get the Full Experience",
-        subtitle: "Download MyApp for rewards & history",
-        action: .openAppStore
-    )
+```sh
+appclipstudio aasa generate --app ABCDE12345.com.example.MyApp \
+  --app-clip ABCDE12345.com.example.MyApp.Clip --path "/table/*" > apple-app-site-association
+appclipstudio aasa validate apple-app-site-association --app-clip ABCDE12345.com.example.MyApp.Clip
+appclipstudio check-domain appclips:appclip.example.com applinks:example.com
 ```
 
-## Size Optimization
+Every command takes `--json`. `appclipstudio help` lists the options.
 
-App Clips must be under 10MB. AppClipsStudio helps:
+## Demo
 
-```swift
-// Analyze bundle size
-let analysis = try await BundleAnalyzer.analyze()
-print("Current size: \(analysis.totalSize)")
-print("Limit: 10MB")
+The example App Clip opened with a table tag URL and a poster URL:
 
-for item in analysis.largestAssets {
-    print("\(item.name): \(item.size)")
-}
+| Table tag (light)                                       | Table tag (dark)                                      | Poster (light)                                         | Poster (dark)                                        |
+| ------------------------------------------------------- | ----------------------------------------------------- | ------------------------------------------------------ | ---------------------------------------------------- |
+| ![Table 12 at Harbor Street, light](docs/images/table-light.png) | ![Table 12 at Harbor Street, dark](docs/images/table-dark.png) | ![Flat White poster offer, light](docs/images/poster-light.png) | ![Flat White poster offer, dark](docs/images/poster-dark.png) |
 
-// Recommendations
-for suggestion in analysis.optimizations {
-    print(suggestion)
-}
+The screenshots are captured on an iPhone simulator by
+[`scripts/capture-screenshots.sh`](scripts/capture-screenshots.sh). In the simulator the
+system passes no activation payload, so the badge reads "Location not checked on this launch".
+
+To try it yourself, open `CoffeeShop.xcodeproj` in [`Examples/CoffeeShop`](Examples/CoffeeShop),
+choose the **CoffeeShopClip** scheme and an iPhone simulator, and press **Run**.
+[Examples/README.md](Examples/README.md) has the details.
+
+## Documentation
+
+- [API reference](https://muhittincamdali.github.io/AppClipsStudio/documentation/appclipsstudio/)
+  (DocC, published to GitHub Pages from `master`)
+- Build it locally in Xcode with **Product › Build Documentation**, or from the command line:
+
+```sh
+xcodebuild docbuild -scheme AppClipsStudio -destination 'generic/platform=iOS Simulator'
 ```
 
-### Automatic Optimizations
+## Guides
 
-```swift
-AppClipOptimizer.configure {
-    $0.compressImages = true
-    $0.stripUnusedCode = true
-    $0.minimizeAssets = true
-    $0.useThinBinary = true
-}
-```
-
-## Testing
-
-### Local Testing
-
-```swift
-// Test invocation locally
-AppClipTester.simulate(
-    url: "https://myapp.com/order?id=test123",
-    location: .mock(latitude: 37.33, longitude: -122.03)
-)
-```
-
-### TestFlight
-
-```swift
-// Configure for TestFlight
-AppClipConfig.testFlight {
-    $0.invocationURL = "https://myapp.com/test"
-    $0.mockLocation = true
-}
-```
-
-### Xcode
-
-```bash
-# Run with invocation URL
-appclipstudio run --url "https://myapp.com/order?id=123"
-```
-
-## Analytics
-
-```swift
-// Track clip performance
-AppClipAnalytics.track(.clipLaunched(experience: .orderFood))
-AppClipAnalytics.track(.paymentCompleted(amount: 29.99))
-AppClipAnalytics.track(.fullAppPromoted)
-
-// Get insights
-let metrics = await AppClipAnalytics.getMetrics()
-print("Launches: \(metrics.launches)")
-print("Conversions: \(metrics.fullAppInstalls)")
-print("Revenue: \(metrics.totalRevenue)")
-```
-
-## Data Transfer
-
-Transfer data to full app:
-
-```swift
-// In App Clip
-AppClipDataTransfer.save(
-    key: "orderHistory",
-    value: orderData
-)
-
-// In Full App
-if let data = AppClipDataTransfer.retrieve(key: "orderHistory") {
-    importOrderHistory(data)
-}
-```
-
-## Best Practices
-
-### Keep It Focused
-
-```swift
-// ✅ Good: Single focused task
-struct BikeRentalClip: AppClip {
-    var body: some Scene {
-        AppClipScene { _ in
-            RentBikeFlow() // Just rental, nothing else
-        }
-    }
-}
-
-// ❌ Avoid: Too many features
-```
-
-### Fast Launch
-
-```swift
-// ✅ Good: Immediate content
-struct QuickOrderClip: View {
-    var body: some View {
-        MenuView() // Shows immediately
-            .task {
-                await loadDetails() // Background
-            }
-    }
-}
-```
-
-### Clear Value
-
-```swift
-// Show value proposition immediately
-SplashView(
-    title: "Order in 30 Seconds",
-    subtitle: "No app download required",
-    action: "Start Order"
-)
-```
-
-## CLI Tool
-
-```bash
-# Initialize App Clip target
-appclipstudio init
-
-# Analyze bundle size
-appclipstudio analyze
-
-# Generate QR codes
-appclipstudio qr --url "https://myapp.com/exp" --output qr.png
-
-# Test invocation
-appclipstudio test --url "https://myapp.com/order"
-
-# Validate configuration
-appclipstudio validate
-```
-
-## Examples
-
-See [Examples](Examples/):
-
-- **CoffeeShop** - Order & pay
-- **BikeRental** - Rent bikes
-- **Restaurant** - View menu & pay bill
-- **Parking** - Pay for parking
+- [Getting Started](https://muhittincamdali.github.io/AppClipsStudio/documentation/appclipsstudio/gettingstarted)
+  — add the package to both targets, route the invocation and test it
+  ([source](Sources/AppClipsStudio/AppClipsStudio.docc/GettingStarted.md)).
+- [Routing Invocations](https://muhittincamdali.github.io/AppClipsStudio/documentation/appclipsstudio/routinginvocations)
+  — what is checked, the pattern syntax and which route wins
+  ([source](Sources/AppClipsStudio/AppClipsStudio.docc/RoutingInvocations.md)).
+- [Checking App Clip Size](https://muhittincamdali.github.io/AppClipsStudio/documentation/appclipsstudio/checkingappclipsize)
+  — Apple's limits, the size report and the `size` command
+  ([source](Sources/AppClipsStudio/AppClipsStudio.docc/CheckingAppClipSize.md)).
+- [Associating Your Website](https://muhittincamdali.github.io/AppClipsStudio/documentation/appclipsstudio/associatingyourwebsite)
+  — entitlement entries, `apple-app-site-association` and App Clip Code URLs
+  ([source](Sources/AppClipsStudio/AppClipsStudio.docc/AssociatingYourWebsite.md)).
+- [Handing Off to the Full App](https://muhittincamdali.github.io/AppClipsStudio/documentation/appclipsstudio/handingofftothefullapp)
+  — location confirmation, the App Store overlay, notifications and `HandoffStore`
+  ([source](Sources/AppClipsStudio/AppClipsStudio.docc/HandingOffToTheFullApp.md)).
 
 ## Requirements
 
-| Platform | Version |
-|----------|---------|
-| iOS | 17.0+ |
-| Xcode | 16.0+ |
+| Platform  | Minimum version                                             |
+| --------- | ----------------------------------------------------------- |
+| iOS       | 16 (location confirmation and the overlay are iOS only)     |
+| macOS     | 13 (the command-line tool and the platform-neutral checks)  |
+| Toolchain | Swift 6.2 · Xcode 26+                                       |
+
+CI builds with the default Xcode of GitHub's `macos-26` runner image. The package is developed
+with Xcode 27. The example app targets iOS 17.
+
+## Architecture
+
+- `Sources/AppClipsStudio` is the library, one folder per task: `Invocation`, `Routing`,
+  `Size`, `AppClipCode`, `Association`, `Handoff`, `Location` and `Promotion`. Everything except
+  the SwiftUI modifiers and the `APActivationPayload` extension is value types and pure
+  functions, so it runs and is tested on macOS too.
+- Errors are typed (`throws(InvocationError)`, `throws(ThinningReportError)`, …) so callers can
+  switch over every case.
+- `Sources/AppClipsStudioTool` holds the command-line tool's commands as a library, so the tests
+  call them directly; `Sources/appclipstudio` only forwards the arguments.
+- CI runs `swift test` on macOS and `xcodebuild test` on an iPhone simulator, builds the example
+  app and publishes the DocC documentation.
+
+Run the tests locally:
+
+```sh
+swift test                                    # macOS
+xcodebuild test -scheme AppClipsStudio-Package \
+  -destination 'platform=iOS Simulator,name=iPhone 17'
+```
+
+## Roadmap
+
+- Add the package to the Swift Package Index; `.spi.yml` is already in the repository.
+- Read sizes from an exported `.ipa` directly, without the size report.
+- An App Clip experience list for the App Store Connect API (advanced experiences per location).
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md).
+Contributions are welcome. Read the [contributing guide](https://github.com/muhittincamdali/AppClipsStudio/blob/master/CONTRIBUTING.md) and the [code of conduct](https://github.com/muhittincamdali/.github/blob/main/CODE_OF_CONDUCT.md) before opening a pull request. Report security issues privately as described in the [security policy](https://github.com/muhittincamdali/.github/blob/main/SECURITY.md).
 
 ## License
 
-MIT License - see [LICENSE](LICENSE).
-
----
-
-<p align="center">
-  <sub>Build instant experiences ⚡</sub>
-</p>
-
----
-
-## 📈 Star History
-
-<a href="https://star-history.com/#muhittincamdali/AppClipsStudio&Date">
- <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=muhittincamdali/AppClipsStudio&type=Date&theme=dark" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=muhittincamdali/AppClipsStudio&type=Date" />
-   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=muhittincamdali/AppClipsStudio&type=Date" />
- </picture>
-</a>
+Released under the MIT license. See [LICENSE](LICENSE).
