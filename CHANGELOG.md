@@ -19,8 +19,10 @@ Apple's App Clip documentation. Nothing from 1.0.0's API remains.
 
 - `Invocation`: validates the invocation URL from `NSUserActivityTypeBrowsingWeb` (https only,
   a host, at most 2,048 bytes, 32 path components and 64 query items, no `.` or `..`
-  components), percent-decodes path and query, and recognizes default App Clip links
-  (`https://appclip.apple.com/id?p=<bundle ID>`). `InvocationLimits` and `InvocationError`.
+  components, no control or format characters in the decoded host, path or query),
+  percent-decodes path and query, and recognizes default App Clip links
+  (`https://appclip.apple.com/id?p=<bundle ID>`, with `p` checked as a bundle identifier).
+  `InvocationLimits` and `InvocationError`.
 - `InvocationRouter`, `RoutePattern` and `RouteMatch`: patterns such as `/order/:id`, `/shop/*`
   and `host/path`, tried from the most specific prefix, with handlers that can decline a match
   and a fallback. `RouteMatch.integer(_:)` and `queryInteger(_:)` never trap.

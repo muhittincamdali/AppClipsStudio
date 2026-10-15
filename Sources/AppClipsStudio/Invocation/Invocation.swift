@@ -6,12 +6,13 @@ import Foundation
 /// the App Clip) in an `NSUserActivity` of type `NSUserActivityTypeBrowsingWeb`. `Invocation`
 /// checks that URL before any of it reaches your code: it must use `https`, have a host, stay
 /// within ``InvocationLimits`` and contain no `.` or `..` path components and no control or
-/// format characters in the path. Path components and query values are percent-decoded; an
-/// encoded slash (`%2F`) stays inside its component.
+/// format characters in the host, the path or the query once decoded. Path components and query
+/// values are percent-decoded; an encoded slash (`%2F`) stays inside its component.
 ///
 /// The default App Clip link that App Store Connect generates,
-/// `https://appclip.apple.com/id?p=<bundle ID>&key=value`, is recognized: its `p` item is
-/// reported as ``defaultLinkBundleIdentifier`` and left out of ``queryItems``.
+/// `https://appclip.apple.com/id?p=<bundle ID>&key=value`, is recognized: its `p` item must be
+/// a bundle identifier, is reported as ``defaultLinkBundleIdentifier`` and is left out of
+/// ``queryItems``.
 public struct Invocation: Sendable, Hashable {
     /// The host of Apple's default App Clip links.
     public static let defaultLinkHost = "appclip.apple.com"
@@ -46,17 +47,21 @@ public struct Invocation: Sendable, Hashable {
         }
         let host = Self.normalizedHost(components.host)
         guard !host.isEmpty else { throw .missingHost }
+        guard !host.unicodeScalars.contains(where: Self.isHidden) else {
+            throw .invalidHost(components.percentEncodedHost ?? "")
+        }
 
         let path = try Self.decodedPath(components.percentEncodedPath, limits: limits)
-        var items = components.queryItems ?? []
-        guard items.count <= limits.maximumQueryItems else {
-            throw .tooManyQueryItems(count: items.count, limit: limits.maximumQueryItems)
-        }
+        var items = try Self.decodedQuery(components, limits: limits)
 
         var bundleIdentifier: String?
         if host == Self.defaultLinkHost, path == ["id"],
            let index = items.firstIndex(where: { $0.name == "p" }) {
-            bundleIdentifier = items[index].value
+            let value = items[index].value ?? ""
+            guard AppIdentifier.isValidBundleIdentifier(value) else {
+                throw .invalidBundleIdentifier(value)
+            }
+            bundleIdentifier = value
             items.remove(at: index)
         }
 
@@ -83,7 +88,8 @@ public struct Invocation: Sendable, Hashable {
         queryItems.filter { $0.name == name }.compactMap(\.value)
     }
 
-    private static func normalizedHost(_ host: String?) -> String {
+    /// The host in lowercase, without a trailing dot, as hosts are compared everywhere.
+    static func normalizedHost(_ host: String?) -> String {
         var host = (host ?? "").lowercased()
         if host.hasSuffix(".") {
             host.removeLast()
@@ -98,6 +104,23 @@ public struct Invocation: Sendable, Hashable {
         case .control, .format, .lineSeparator, .paragraphSeparator: true
         default: false
         }
+    }
+
+    private static func decodedQuery(
+        _ components: URLComponents,
+        limits: InvocationLimits
+    ) throws(InvocationError) -> [URLQueryItem] {
+        let items = components.queryItems ?? []
+        guard items.count <= limits.maximumQueryItems else {
+            throw .tooManyQueryItems(count: items.count, limit: limits.maximumQueryItems)
+        }
+        let encoded = components.percentEncodedQueryItems ?? []
+        for (index, item) in items.enumerated() {
+            let text = item.name + (item.value ?? "")
+            guard text.unicodeScalars.contains(where: Self.isHidden) else { continue }
+            throw .invalidQueryItem(index < encoded.count ? encoded[index].name : item.name)
+        }
+        return items
     }
 
     private static func decodedPath(
@@ -169,4 +192,12 @@ public enum InvocationError: Error, Sendable, Hashable {
     /// A path component is `.`, `..`, not valid percent-encoding, or contains a control or
     /// format character once decoded.
     case invalidPathComponent(String)
+    /// The host contains a control or format character once decoded, such as `ex%0Aample.com`.
+    /// The value is the host as written.
+    case invalidHost(String)
+    /// A query item's name or value contains a control or format character once decoded. The
+    /// value is the item's name as written.
+    case invalidQueryItem(String)
+    /// The `p` item of a default App Clip link is not a bundle identifier.
+    case invalidBundleIdentifier(String)
 }

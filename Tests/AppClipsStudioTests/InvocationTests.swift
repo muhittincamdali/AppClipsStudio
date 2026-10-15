@@ -83,6 +83,23 @@ struct InvocationTests {
         #expect(error("https://example.com/caf%E2%80%AEe") == .invalidPathComponent("caf%E2%80%AEe"))
     }
 
+    @Test func rejectsControlAndFormatCharactersInTheHostAndQuery() throws {
+        #expect(error("https://ex%0Aample.com/a") == .invalidHost("ex%0Aample.com"))
+        #expect(error("https://ex%E2%80%AEample.com/a") == .invalidHost("ex%E2%80%AEample.com"))
+        #expect(error("https://example.com/a?name=Jo%C2%9B2J") == .invalidQueryItem("name"))
+        #expect(error("https://example.com/a?na%0Ame=1") == .invalidQueryItem("na%0Ame"))
+        #expect(error("https://example.com/a?x=1&note=%E2%80%AE") == .invalidQueryItem("note"))
+        #expect(try invocation("https://example.com/a?name=Caf%C3%A9").queryValue("name") == "Café")
+    }
+
+    @Test func defaultLinkNeedsABundleIdentifier() {
+        #expect(error("https://appclip.apple.com/id?p=com.example%0A.Clip") == .invalidQueryItem("p"))
+        #expect(error("https://appclip.apple.com/id?p=com/example") == .invalidBundleIdentifier("com/example"))
+        #expect(error("https://appclip.apple.com/id?p=") == .invalidBundleIdentifier(""))
+        #expect(error("https://appclip.apple.com/id?p") == .invalidBundleIdentifier(""))
+        #expect(error("https://appclip.apple.com/id?p=com..example") == .invalidBundleIdentifier("com..example"))
+    }
+
     @Test func enforcesURLLengthBeforeParsing() {
         let long = "https://example.com/" + String(repeating: "a", count: 3000)
         #expect(error(long) == .urlTooLong(length: long.utf8.count, limit: 2048))
