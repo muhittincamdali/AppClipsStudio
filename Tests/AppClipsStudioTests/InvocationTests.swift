@@ -77,6 +77,12 @@ struct InvocationTests {
         #expect(error("https://example.com/%2E%2E/admin") == .invalidPathComponent("%2E%2E"))
     }
 
+    @Test func rejectsControlAndFormatCharactersInThePath() {
+        #expect(error("https://example.com/menu%0Aadmin") == .invalidPathComponent("menu%0Aadmin"))
+        #expect(error("https://example.com/%00") == .invalidPathComponent("%00"))
+        #expect(error("https://example.com/caf%E2%80%AEe") == .invalidPathComponent("caf%E2%80%AEe"))
+    }
+
     @Test func enforcesURLLengthBeforeParsing() {
         let long = "https://example.com/" + String(repeating: "a", count: 3000)
         #expect(error(long) == .urlTooLong(length: long.utf8.count, limit: 2048))

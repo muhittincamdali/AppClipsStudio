@@ -38,10 +38,22 @@ struct BundleSizeScannerTests {
         #expect(size.fileCount == 4)
     }
 
-    @Test func stopsAfterTheFileLimit() {
-        #expect(throws: BundleScanError.tooManyFiles(limit: 3)) {
-            try BundleSizeScanner(maximumFiles: 3).scan(root)
+    @Test func stopsAfterTheEntryLimit() {
+        // Six entries: four files, Frameworks and Kit.framework.
+        #expect(throws: BundleScanError.tooManyEntries(limit: 3)) {
+            try BundleSizeScanner(maximumEntries: 3).scan(root)
         }
+    }
+
+    @Test func emptyFoldersCountTowardTheLimit() throws {
+        let deep = root.appendingPathComponent("Empty")
+        for index in 0..<20 {
+            try FileManager.default.createDirectory(at: deep.appendingPathComponent("\(index)"), withIntermediateDirectories: true)
+        }
+        #expect(throws: BundleScanError.tooManyEntries(limit: 20)) {
+            try BundleSizeScanner(maximumEntries: 20).scan(root)
+        }
+        #expect(try BundleSizeScanner(maximumEntries: 100).scan(root).fileCount == 4)
     }
 
     @Test func rejectsFilesAndMissingPaths() {

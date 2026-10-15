@@ -77,4 +77,4 @@ so treat it as an early warning and the size report as the answer.
 The report parser accepts plain decimal sizes only (`6.7`, `6,7`, `512`, `Zero`) with the units
 bytes, KB, MB and GB, so text such as `nan`, `inf` or `1e999` is rejected instead of becoming a
 size. Reports over 8 MB or with more than 4,096 variants are refused, and the folder scan stops
-after 100,000 files and doesn't follow symbolic links.
+after 100,000 files and folders and doesn't follow symbolic links.

@@ -5,8 +5,9 @@ import Foundation
 /// The system passes the invocation URL to the App Clip (and to the full app once it replaces
 /// the App Clip) in an `NSUserActivity` of type `NSUserActivityTypeBrowsingWeb`. `Invocation`
 /// checks that URL before any of it reaches your code: it must use `https`, have a host, stay
-/// within ``InvocationLimits`` and contain no `.` or `..` path components. Path components and
-/// query values are percent-decoded; an encoded slash (`%2F`) stays inside its component.
+/// within ``InvocationLimits`` and contain no `.` or `..` path components and no control or
+/// format characters in the path. Path components and query values are percent-decoded; an
+/// encoded slash (`%2F`) stays inside its component.
 ///
 /// The default App Clip link that App Store Connect generates,
 /// `https://appclip.apple.com/id?p=<bundle ID>&key=value`, is recognized: its `p` item is
@@ -90,6 +91,15 @@ public struct Invocation: Sendable, Hashable {
         return host
     }
 
+    /// Control and format characters, such as a decoded `%0A` or a bidirectional override, have
+    /// no place in a path and could reach logs or the screen.
+    private static func isHidden(_ scalar: Unicode.Scalar) -> Bool {
+        switch scalar.properties.generalCategory {
+        case .control, .format, .lineSeparator, .paragraphSeparator: true
+        default: false
+        }
+    }
+
     private static func decodedPath(
         _ encodedPath: String,
         limits: InvocationLimits
@@ -102,7 +112,8 @@ public struct Invocation: Sendable, Hashable {
         decoded.reserveCapacity(encoded.count)
         for component in encoded {
             guard let value = String(component).removingPercentEncoding,
-                  !value.isEmpty, value != ".", value != ".." else {
+                  !value.isEmpty, value != ".", value != "..",
+                  !value.unicodeScalars.contains(where: Self.isHidden) else {
                 throw .invalidPathComponent(String(component))
             }
             decoded.append(value)
@@ -155,6 +166,7 @@ public enum InvocationError: Error, Sendable, Hashable {
     case tooManyPathComponents(count: Int, limit: Int)
     /// The query has more items than ``InvocationLimits/maximumQueryItems``.
     case tooManyQueryItems(count: Int, limit: Int)
-    /// A path component is `.`, `..`, or not valid percent-encoding.
+    /// A path component is `.`, `..`, not valid percent-encoding, or contains a control or
+    /// format character once decoded.
     case invalidPathComponent(String)
 }

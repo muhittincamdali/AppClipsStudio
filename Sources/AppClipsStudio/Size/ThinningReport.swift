@@ -41,6 +41,8 @@ public struct ThinningReport: Sendable, Hashable {
     public static let maximumReportBytes = 8 * 1024 * 1024
     /// The most variants accepted.
     public static let maximumVariants = 4096
+    /// The most descriptors read per variant; the rest of a longer list is ignored.
+    public static let maximumDescriptorsPerVariant = 1024
 
     /// The app name from the first line, if present.
     public let appName: String?
@@ -108,7 +110,7 @@ private struct Parser {
 
     /// Reads `os-version` from each `[device: …, os-version: …]` group.
     private static func osVersions(in descriptors: String) -> [String] {
-        descriptors.split(separator: "[").compactMap { group in
+        descriptors.split(separator: "[").prefix(ThinningReport.maximumDescriptorsPerVariant).compactMap { group in
             guard let close = group.firstIndex(of: "]") else { return nil }
             let fields = group[..<close].split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces) }
             return fields.first { $0.hasPrefix("os-version:") }

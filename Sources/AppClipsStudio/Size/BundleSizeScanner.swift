@@ -26,16 +26,17 @@ public struct BundleSize: Sendable, Hashable, Encodable {
 /// ``ThinningReport`` for the final answer.
 ///
 /// The scan does not follow symbolic links, so a link that points back up the tree can't make it
-/// loop, and it stops with ``BundleScanError/tooManyFiles(limit:)`` after ``maximumFiles``.
+/// loop, and it stops with ``BundleScanError/tooManyEntries(limit:)`` after ``maximumEntries``
+/// files and folders.
 public struct BundleSizeScanner: Sendable {
-    /// The most files scanned before giving up.
-    public let maximumFiles: Int
+    /// The most files and folders visited before giving up.
+    public let maximumEntries: Int
     /// How many of the largest files to report.
     public let largestFileCount: Int
 
     /// Creates a scanner.
-    public init(maximumFiles: Int = 100_000, largestFileCount: Int = 10) {
-        self.maximumFiles = maximumFiles
+    public init(maximumEntries: Int = 100_000, largestFileCount: Int = 10) {
+        self.maximumEntries = maximumEntries
         self.largestFileCount = max(0, largestFileCount)
     }
 
@@ -62,10 +63,12 @@ public struct BundleSizeScanner: Sendable {
         var count = 0
         var largest: [BundleSize.File] = []
         let root = url.standardizedFileURL.path
+        var visited = 0
         for case let fileURL as URL in enumerator {
+            visited += 1
+            guard visited <= maximumEntries else { throw .tooManyEntries(limit: maximumEntries) }
             guard let values = try? fileURL.resourceValues(forKeys: Set(keys)), values.isRegularFile == true else { continue }
             count += 1
-            guard count <= maximumFiles else { throw .tooManyFiles(limit: maximumFiles) }
             let bytes = Int64(max(0, values.fileSize ?? 0))
             let sum = total.addingReportingOverflow(bytes)
             total = sum.overflow ? ByteSize.maximumBytes : min(sum.partialValue, ByteSize.maximumBytes)
@@ -107,6 +110,6 @@ public enum BundleScanError: Error, Sendable, Hashable {
     case notADirectory(String)
     /// A file or folder could not be read.
     case unreadable(String)
-    /// The folder holds more files than ``BundleSizeScanner/maximumFiles``.
-    case tooManyFiles(limit: Int)
+    /// The folder holds more files and folders than ``BundleSizeScanner/maximumEntries``.
+    case tooManyEntries(limit: Int)
 }

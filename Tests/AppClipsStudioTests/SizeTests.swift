@@ -128,6 +128,13 @@ struct ThinningReportTests {
         }
     }
 
+    @Test func readsAtMostTheDescriptorLimit() throws {
+        let many = (0..<2000).map { "[device: iPhone1,1, os-version: \(14 + $0 % 3).0]" }.joined(separator: ", ")
+        let report = try ThinningReport(parsing: "Variant: A.ipa\nSupported variant descriptors: \(many)\nApp size: 1 MB compressed, 1 MB uncompressed")
+        #expect(report.variants.first?.osVersions.count == ThinningReport.maximumDescriptorsPerVariant)
+        #expect(report.variants.first?.lowestOSMajorVersion == 14)
+    }
+
     @Test func hugeOSVersionsAreIgnoredInsteadOfTrapping() throws {
         let report = try ThinningReport(parsing: """
             Variant: A.ipa

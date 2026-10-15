@@ -44,10 +44,10 @@ enum SizeCommand {
             throw .input("No file or folder at \(ToolError.printable(path)).")
         }
         if isDirectory.boolValue {
-            do {
+            do throws(BundleScanError) {
                 return budget.evaluate(try BundleSizeScanner().scan(url), name: url.lastPathComponent)
             } catch {
-                throw .input("Could not measure \(ToolError.printable(path)): \(error).")
+                throw .input("Could not measure \(ToolError.printable(path)): \(describe(error)).")
             }
         }
         let text = try FileInput.text(at: url, limit: ThinningReport.maximumReportBytes)
@@ -55,6 +55,14 @@ enum SizeCommand {
             return budget.evaluate(try ThinningReport(parsing: text))
         } catch {
             throw .input("\(ToolError.printable(path)) is not an App Thinning Size Report: \(describe(error)).")
+        }
+    }
+
+    private static func describe(_ error: BundleScanError) -> String {
+        switch error {
+        case .notADirectory: "it is not a folder"
+        case .unreadable(let path): "\(ToolError.printable(path)) could not be read"
+        case .tooManyEntries(let limit): "it holds more than \(limit) files and folders"
         }
     }
 
