@@ -14,7 +14,7 @@ import Foundation
 /// ```
 public enum AppClipCodeURLCheck {
     /// The longest input checked, in UTF-8 bytes; longer input gives a single
-    /// ``AppClipCodeFinding/Kind/tooLong`` error without being scanned.
+    /// ``AppClipCodeFinding/Kind/tooLong(limit:)`` error without being scanned.
     public static let maximumInputLength = 1024
 
     /// Path words that Apple's encoder compresses well when used as the single path component.

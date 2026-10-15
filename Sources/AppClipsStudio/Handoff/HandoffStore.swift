@@ -60,8 +60,10 @@ public struct HandoffStore<Value: Codable & Sendable>: @unchecked Sendable {
 
     /// Saves a value, replacing the previous one.
     ///
-    /// - Parameter expiresAfter: Seconds until the value is discarded on load; `nil` keeps it
-    ///   until it is taken or cleared. Must be a finite, positive number.
+    /// - Parameters:
+    ///   - value: The value to pass to the full app.
+    ///   - expiresAfter: Seconds until the value is discarded on load; `nil` keeps it until it
+    ///     is taken or cleared. Must be a finite, positive number.
     public func save(_ value: Value, expiresAfter: TimeInterval? = nil) throws(HandoffError) {
         let savedAt = now()
         var expiresAt: Date?
