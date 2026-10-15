@@ -15,8 +15,10 @@ timeout = 20
 # contents cannot point at a renamed heading.
 include_fragments = "anchor-only"
 
-# 403/429 from rate limiting are not broken links; everything else outside 2xx is.
-accept = ["200..=299", "403", "429"]
+# Only a 2xx answer, after redirects, passes. A 403 or 429 is reported too: an accepted 403 would
+# also hide a page that was made private, and a rate-limited link is retried (max_retries) and
+# never cached (cache_exclude_status), so the next run checks it again.
+accept = ["200..=299"]
 
 exclude_loopback = true
 exclude_private = true
@@ -31,6 +33,20 @@ exclude = [
   '^https?://api\.example\.com',
   # Pull request and comparison pages that only exist after a push.
   '^https://github\.com/[^/]+/[^/]+/compare/',
+]
+
+remap = [
+  '^https://raw\.githubusercontent\.com/muhittincamdali/AppClipsStudio/master/(.*)$ file:///home/runner/work/AppClipsStudio/AppClipsStudio/$1',
+  '^https://github\.com/muhittincamdali/AppClipsStudio/(?:blob|tree)/master/(.*)$ file:///home/runner/work/AppClipsStudio/AppClipsStudio/$1',
+  # The article pages on GitHub Pages are built from the .docc articles by docs.yml after a push
+  # to master, so a pull request that adds an article links to a page that is not online yet. Each
+  # article URL is checked against its source file instead; the documentation root stays a live
+  # check, so a site that is down still fails.
+  '^https://muhittincamdali\.github\.io/AppClipsStudio/documentation/appclipsstudio/gettingstarted$ file:///home/runner/work/AppClipsStudio/AppClipsStudio/Sources/AppClipsStudio/AppClipsStudio.docc/GettingStarted.md',
+  '^https://muhittincamdali\.github\.io/AppClipsStudio/documentation/appclipsstudio/routinginvocations$ file:///home/runner/work/AppClipsStudio/AppClipsStudio/Sources/AppClipsStudio/AppClipsStudio.docc/RoutingInvocations.md',
+  '^https://muhittincamdali\.github\.io/AppClipsStudio/documentation/appclipsstudio/checkingappclipsize$ file:///home/runner/work/AppClipsStudio/AppClipsStudio/Sources/AppClipsStudio/AppClipsStudio.docc/CheckingAppClipSize.md',
+  '^https://muhittincamdali\.github\.io/AppClipsStudio/documentation/appclipsstudio/associatingyourwebsite$ file:///home/runner/work/AppClipsStudio/AppClipsStudio/Sources/AppClipsStudio/AppClipsStudio.docc/AssociatingYourWebsite.md',
+  '^https://muhittincamdali\.github\.io/AppClipsStudio/documentation/appclipsstudio/handingofftothefullapp$ file:///home/runner/work/AppClipsStudio/AppClipsStudio/Sources/AppClipsStudio/AppClipsStudio.docc/HandingOffToTheFullApp.md',
 ]
 
 exclude_path = [
