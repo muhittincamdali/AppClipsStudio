@@ -106,6 +106,15 @@ struct ThinningReportTests {
         }
     }
 
+    @Test func countsLinesAcrossLineEndings() throws {
+        let text = "\r\n\n\rVariant: A.ipa\r\n\u{2028}App size: 1 MB compressed, 2 TB uncompressed\n"
+        #expect(throws: ThinningReportError.invalidSize(line: 6, text: "2 TB uncompressed")) {
+            try ThinningReport(parsing: text)
+        }
+        let report = try ThinningReport(parsing: "\n\nVariant: A.ipa\r\nApp size: 1 MB compressed, 2 MB uncompressed\n")
+        #expect(report.variants.map(\.name) == ["A.ipa"])
+    }
+
     @Test func rejectsReportsWithoutVariantsOrSizes() {
         #expect(throws: ThinningReportError.noVariants) { try ThinningReport(parsing: "hello") }
         #expect(throws: ThinningReportError.missingSize(variant: "A.ipa")) {

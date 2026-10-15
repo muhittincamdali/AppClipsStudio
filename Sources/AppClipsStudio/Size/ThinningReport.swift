@@ -55,8 +55,16 @@ public struct ThinningReport: Sendable, Hashable {
             throw .tooLarge(bytes: text.utf8.count, limit: Self.maximumReportBytes)
         }
         var parser = Parser()
-        for (index, line) in text.split(omittingEmptySubsequences: false, whereSeparator: \.isNewline).enumerated() {
-            try parser.read(line.trimmingCharacters(in: .whitespaces), lineNumber: index + 1)
+        // One line at a time: splitting the whole text first keeps a substring per line alive,
+        // which for a report of 8 MB of newlines is several hundred megabytes.
+        var lineStart = text.startIndex
+        var lineNumber = 1
+        while true {
+            let lineEnd = text[lineStart...].firstIndex(where: \.isNewline) ?? text.endIndex
+            try parser.read(text[lineStart..<lineEnd].trimmingCharacters(in: .whitespaces), lineNumber: lineNumber)
+            guard lineEnd < text.endIndex else { break }
+            lineStart = text.index(after: lineEnd)
+            lineNumber += 1
         }
         let variants = try parser.finish()
         guard !variants.isEmpty else { throw .noVariants }
