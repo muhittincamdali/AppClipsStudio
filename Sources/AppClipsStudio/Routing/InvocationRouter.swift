@@ -29,7 +29,8 @@ public struct InvocationRouter<Destination>: Sendable {
         let handler: Handler
     }
 
-    /// The hosts invocations may come from, in lowercase. Empty allows any host.
+    /// The hosts invocations may come from, in lowercase and without a trailing dot, as
+    /// ``Invocation/host`` is. Empty allows any host.
     public let allowedHosts: Set<String>
     /// The bounds every invocation URL must stay within.
     public let limits: InvocationLimits
@@ -44,7 +45,7 @@ public struct InvocationRouter<Destination>: Sendable {
     ///     default App Clip links.
     ///   - limits: The bounds every invocation URL must stay within.
     public init(allowedHosts: Set<String> = [], limits: InvocationLimits = .standard) {
-        self.allowedHosts = Set(allowedHosts.map { $0.lowercased() })
+        self.allowedHosts = Set(allowedHosts.map { Invocation.normalizedHost($0) })
         self.limits = limits
     }
 

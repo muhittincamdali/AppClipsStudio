@@ -97,6 +97,20 @@ struct RouterTests {
         #expect(try router.route(url("https://example.com/order?p=12x")) == nil)
     }
 
+    @Test func hostsWithATrailingDotMatchAsInvocationHostsDo() throws {
+        var router = InvocationRouter<Screen>(allowedHosts: ["Example.com."])
+        #expect(router.allowedHosts == ["example.com"])
+        try router.add("AppClip.Example.com./table/:number") { match in match["number"].map(Screen.table) }
+        router.fallback { _ in .home }
+        #expect(router.patterns.first?.host == "appclip.example.com")
+        #expect(try router.route(url("https://example.com/menu")) == .home)
+        #expect(try router.route(url("https://example.com./menu")) == .home)
+        var hosted = InvocationRouter<Screen>()
+        try hosted.add("appclip.example.com./table/:number") { match in match["number"].map(Screen.table) }
+        #expect(try hosted.route(url("https://appclip.example.com/table/4")) == .table("4"))
+        #expect(throws: RoutePatternError.invalidHost(".")) { try hosted.add("./a") { _ in .home } }
+    }
+
     @Test func rejectsMalformedPatterns() {
         var router = InvocationRouter<Screen>()
         #expect(throws: RoutePatternError.empty) { try router.add("") { _ in .home } }

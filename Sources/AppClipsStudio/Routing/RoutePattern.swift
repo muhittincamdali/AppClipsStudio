@@ -17,7 +17,8 @@ public struct RoutePattern: Sendable, Hashable, CustomStringConvertible {
         case parameter(String)
     }
 
-    /// The host this pattern is limited to, in lowercase, or `nil` for any allowed host.
+    /// The host this pattern is limited to, in lowercase and without a trailing dot, or `nil`
+    /// for any allowed host.
     public let host: String?
     let segments: [Segment]
     let matchesDescendants: Bool
@@ -33,6 +34,8 @@ public struct RoutePattern: Sendable, Hashable, CustomStringConvertible {
         guard hostPart.allSatisfy({ $0.isASCII && ($0.isLetter || $0.isNumber || $0 == "." || $0 == "-") }) else {
             throw .invalidHost(hostPart)
         }
+        let host = Invocation.normalizedHost(hostPart)
+        guard host.isEmpty == hostPart.isEmpty else { throw .invalidHost(hostPart) }
         var parts = pattern[slash...].split(separator: "/", omittingEmptySubsequences: true).map(String.init)
 
         var descendants = false
@@ -46,7 +49,7 @@ public struct RoutePattern: Sendable, Hashable, CustomStringConvertible {
             segments.append(try Self.segment(part, names: &names))
         }
 
-        self.host = hostPart.isEmpty ? nil : hostPart
+        self.host = host.isEmpty ? nil : host
         self.segments = segments
         self.matchesDescendants = descendants
         self.description = pattern
