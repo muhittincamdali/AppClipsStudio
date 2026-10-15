@@ -139,13 +139,14 @@ struct ToolTests {
     }
 
     @Test func jsonEscapesC1AndFormatCharacters() throws {
-        let url = "https://example.com/a\u{9B}31m\u{202E}b\u{2028}c\u{E0001}d"
+        let url = "https://example.com/a\u{9B}31m\u{202E}b\u{2028}c\u{E0001}d\u{7F}e"
         let result = Tool.run(["check-url", "--json", url])
-        for hidden in ["\u{9B}", "\u{202E}", "\u{2028}", "\u{E0001}"] {
+        for hidden in ["\u{9B}", "\u{202E}", "\u{2028}", "\u{E0001}", "\u{7F}"] {
             #expect(!result.standardOutput.contains(hidden))
         }
         #expect(result.standardOutput.contains(#"\u009b"#))
         #expect(result.standardOutput.contains(#"\udb40\udc01"#))
+        #expect(result.standardOutput.contains(#"\u007f"#))
         let reports = try #require(JSONSerialization.jsonObject(with: Data(result.standardOutput.utf8)) as? [[String: Any]])
         #expect(reports.first?["url"] as? String == url)
         #expect(escapingHiddenScalars("{\n  \"a\" : \"İ\"\n}") == "{\n  \"a\" : \"İ\"\n}")

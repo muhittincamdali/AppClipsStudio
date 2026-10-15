@@ -71,15 +71,17 @@ extension Encodable {
     }
 }
 
-/// JSONEncoder escapes C0 controls but writes C1 controls (such as U+009B, which terminals read
-/// as an escape sequence), bidirectional overrides and line separators as they are. Outside
-/// strings JSON is ASCII, so every non-ASCII scalar of these categories is inside a string.
+/// JSONEncoder escapes C0 controls but writes DEL, C1 controls (such as U+009B, which terminals
+/// read as an escape sequence), bidirectional overrides and line separators as they are. Outside
+/// strings JSON is printable ASCII and whitespace, so DEL and every non-ASCII scalar of these
+/// categories is inside a string.
 func escapingHiddenScalars(_ json: String) -> String {
     let hidden: Set<Unicode.GeneralCategory> = [.control, .format, .lineSeparator, .paragraphSeparator]
     var result = ""
     result.reserveCapacity(json.utf8.count)
     for scalar in json.unicodeScalars {
-        guard !scalar.isASCII, hidden.contains(scalar.properties.generalCategory) else {
+        let isHidden = scalar == "\u{7F}" || (!scalar.isASCII && hidden.contains(scalar.properties.generalCategory))
+        guard isHidden else {
             result.unicodeScalars.append(scalar)
             continue
         }
