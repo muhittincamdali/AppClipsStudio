@@ -54,8 +54,10 @@ public enum AppClipCodeURLCheck {
         if let invalid = rest.first(where: { !restCharacters.contains($0) }) {
             findings.append(AppClipCodeFinding(.invalidCharacter(describe(invalid))))
         }
-        guard findings.isEmpty else { return findings }
-        return URLParts(rest).suggestions()
+        guard !findings.contains(where: { $0.severity == .error }) else {
+            return findings.filter { $0.severity == .error }
+        }
+        return findings + URLParts(rest).suggestions()
     }
 
     /// Printable ASCII as is; anything else as `U+XXXX`, so control characters never reach a

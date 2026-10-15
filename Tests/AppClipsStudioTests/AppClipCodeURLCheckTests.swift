@@ -56,6 +56,11 @@ struct AppClipCodeURLCheckTests {
         #expect(kinds("https://shop.appclip.example.com") == [.appClipSubdomainNotFirst])
     }
 
+    @Test func reportsHostAndPathSuggestionsTogether() {
+        #expect(kinds("https://www.example.com/products/") == [.wwwSubdomain, .trailingSlash])
+        #expect(kinds("https://www.Example.com/products/") == [.invalidHostCharacter("E")], "errors replace suggestions")
+    }
+
     @Test func suggestsShortPaths() {
         #expect(kinds("https://example.com/") == [.trailingSlash])
         #expect(kinds("https://example.com/menu/") == [.trailingSlash])
