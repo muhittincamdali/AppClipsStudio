@@ -50,7 +50,7 @@ enum AssociationCommand {
             case .appClipNotInApp:
                 throw .usage("The App Clip's identifier must be the app's followed by a suffix, such as \(app).Clip.")
             case .invalidPath(let path):
-                throw .usage("--path \(ToolError.printable(path)) must start with / or be *.")
+                throw .usage("--path \(ToolError.printable(path)) must start with / or be *, without control or format characters.")
             }
         }
         guard let data = try? file.jsonData() else { throw .input("Could not encode the file.") }

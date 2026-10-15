@@ -23,12 +23,13 @@ public struct AssociationFile: Sendable, Hashable {
     /// wildcards). Empty leaves out the `applinks` service.
     public let universalLinkPaths: [String]
 
-    /// Creates a file, or throws when the App Clip's identifier doesn't extend the app's.
+    /// Creates a file, or throws when the App Clip's identifier doesn't extend the app's or a
+    /// path is not valid.
     public init(app: AppIdentifier, appClip: AppIdentifier, universalLinkPaths: [String] = ["*"]) throws(AssociationFileError) {
         guard appClip.isAppClip(of: app) else {
             throw .appClipNotInApp(appClip: appClip.description, app: app.description)
         }
-        for path in universalLinkPaths where !path.hasPrefix("/") && path != "*" {
+        for path in universalLinkPaths where !Self.isValidPath(path) {
             throw .invalidPath(path)
         }
         self.app = app
@@ -45,12 +46,25 @@ public struct AssociationFile: Sendable, Hashable {
         }
         return try JSONSerialization.data(withJSONObject: root, options: [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes])
     }
+
+    /// `*`, or a path that starts with `/`. Control and format characters (a newline, U+009B, a
+    /// bidirectional override) never match a URL path and would be written into the file as is.
+    private static func isValidPath(_ path: String) -> Bool {
+        guard path == "*" || path.hasPrefix("/") else { return false }
+        return !path.unicodeScalars.contains { scalar in
+            switch scalar.properties.generalCategory {
+            case .control, .format, .lineSeparator, .paragraphSeparator: true
+            default: false
+            }
+        }
+    }
 }
 
 /// Why an association file could not be built.
 public enum AssociationFileError: Error, Sendable, Hashable {
     /// The App Clip's identifier is not the app's identifier followed by a suffix.
     case appClipNotInApp(appClip: String, app: String)
-    /// A universal link path doesn't start with `/` and isn't `*`.
+    /// A universal link path doesn't start with `/` and isn't `*`, or contains a control or
+    /// format character.
     case invalidPath(String)
 }

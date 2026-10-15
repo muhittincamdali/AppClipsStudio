@@ -110,6 +110,11 @@ struct AssociationFileTests {
         #expect(throws: AssociationFileError.invalidPath("order")) {
             try AssociationFile(app: app, appClip: AppIdentifier("ABCDE12345.com.example.MyApp.Clip"), universalLinkPaths: ["order"])
         }
+        for path in ["/order\u{9B}31m", "/\u{202E}redro", "/a\nb", "/a\u{2028}b"] {
+            #expect(throws: AssociationFileError.invalidPath(path)) {
+                try AssociationFile(app: app, appClip: AppIdentifier("ABCDE12345.com.example.MyApp.Clip"), universalLinkPaths: [path])
+            }
+        }
     }
 
     @Test func generatorCanLeaveOutUniversalLinks() throws {
